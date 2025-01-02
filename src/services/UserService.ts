@@ -18,14 +18,10 @@ const headers = {
 
 class UserService {
   static async createUser(payload: UserCreatePayload): Promise<ApiResponse<User>> {
-    toast.info('Cargando...', { autoClose: false });
     try {
       const response = await axios.post(`${apiUrl}/Usuarios/Create`, payload, { headers });
-      toast.dismiss();
       if (response.data.HasError) {
         toast.error(response.data.Message);
-      } else {
-        toast.success('Usuario creado exitosamente');
       }
       return response.data;
     } catch (error) {
@@ -34,15 +30,11 @@ class UserService {
   }
 
   static async updateUser(payload: UserUpdatePayload): Promise<ApiResponse<User>> {
-    toast.info('Cargando...', { autoClose: false });
     try {
       const response = await axios.put(`${apiUrl}/Usuarios/Update`, payload, { headers });
-      toast.dismiss();
       if (response.data.HasError) {
         toast.error(response.data.Message);
-      } else {
-        toast.success('Usuario actualizado exitosamente');
-      }
+      } 
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -50,14 +42,10 @@ class UserService {
   }
 
   static async updateUserStatus(payload: UserUpdateStatusPayload): Promise<ApiResponse<User>> {
-    toast.info('Cargando...', { autoClose: false });
     try {
       const response = await axios.put(`${apiUrl}/Usuarios/UpdateStatus`, payload, { headers });
-      toast.dismiss();
       if (response.data.HasError) {
         toast.error(response.data.Message);
-      } else {
-        toast.success('Estatus de usuario actualizado');
       }
       return response.data;
     } catch (error) {
@@ -66,14 +54,10 @@ class UserService {
   }
 
   static async deleteUser(id: string): Promise<ApiResponse<boolean>> {
-    toast.info('Cargando...', { autoClose: false });
     try {
       const response = await axios.delete(`${apiUrl}/Usuarios/${id}`, { headers });
-      toast.dismiss();
       if (response.data.HasError) {
         toast.error(response.data.Message);
-      } else {
-        toast.success('Usuario eliminado exitosamente');
       }
       return response.data;
     } catch (error) {
@@ -82,15 +66,11 @@ class UserService {
   }
 
   static async getUserById(id: string): Promise<ApiResponse<User>> {
-    toast.info('Consultando...', { autoClose: false });
     try {
       const response = await axios.get(`${apiUrl}/Usuarios/${id}`, { headers });
-      toast.dismiss();
       if (response.data.HasError) {
         toast.error(response.data.Message);
-      } else {
-        toast.success('Usuario consultado exitosamente');
-      }
+      } 
       return response.data;
     } catch (error) {
       this.handleError(error);
@@ -98,14 +78,10 @@ class UserService {
   }
 
   static async getUsersByFilters(payload: UserFilterPayload): Promise<ApiResponse<User[]>> {
-    toast.info('Consultando...', { autoClose: false });
     try {
       const response = await axios.post(`${apiUrl}/Usuarios/ByFilters`, payload, { headers });
-      toast.dismiss();
       if (response.data.HasError) {
         toast.error(response.data.Message);
-      } else {
-        toast.success('Usuarios consultados exitosamente');
       }
       return response.data;
     } catch (error) {
@@ -114,7 +90,6 @@ class UserService {
   }
 
   private static handleError(error: any): never {
-    toast.dismiss();
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
         // Si el error es 401 (no autorizado), limpiar tokens y redirigir

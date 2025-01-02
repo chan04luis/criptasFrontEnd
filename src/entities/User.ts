@@ -3,7 +3,7 @@ export interface User {
     Nombres: string;
     Apellidos: string;
     Correo: string;
-    Contra: string;
+    Contra?: string;
     Telefono: string;
     Activo: boolean;
     FechaRegistro: string;
@@ -14,7 +14,7 @@ export interface User {
     Nombres: string;
     Apellidos: string;
     Correo: string;
-    Contra: string;
+    Contra?: string;
     Telefono: string;
     Activo: boolean;
   }

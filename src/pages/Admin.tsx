@@ -165,8 +165,8 @@ const Admin = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          bgcolor: "background.default",
-          p: 3,
+          backgroundColor: "#f2f2f2",
+          p: 0,
           marginLeft: isMobile ? 0 : drawerOpen ? 0 : "240px",
           marginTop: "64px",
           overflow: "auto",
@@ -174,8 +174,6 @@ const Admin = () => {
       >
         <Routes>
           <Route path="usuarios" element={<ViewUsers />} />
-          <Route path="usuarios/crear" element={<CreateUser />} />
-          <Route path="usuarios/editar/:id?" element={<CreateUser />} />
           <Route
             path="clientes"
             element={

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Box, Typography, TextField, Button, Link } from "@mui/material";
+import { Container, Box, Typography, useMediaQuery, TextField, Button, Link } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -9,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { updateToken } = useAuth(); 
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -77,12 +78,13 @@ const Login = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: 3,
+            padding: isMobile ? 2 : 3,
             backgroundColor: "white",
             borderRadius: "8px",
             boxShadow: 3,
-            width: "100%",
+            width: "90%",
             maxWidth: "400px",
+            fontSize: isMobile ? '13px' : '14px'
           }}
         >
           <Typography variant="h4" gutterBottom>
