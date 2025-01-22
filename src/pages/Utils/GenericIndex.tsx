@@ -4,15 +4,14 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  CircularProgress,
-  IconButton,
-  Button,
+  CircularProgress
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import GenericFormModal from "./GenericFormModal"; // Modal genérico para formularios
 import { User, UserCreatePayload } from "../../entities/User";
+import CustomIconButton from './CustomIconButton';
 
 interface ConfiguracionProps {
   colorPrimary: string;
@@ -60,7 +59,6 @@ interface GenericIndexProps<T, F> {
 const GenericIndex = <T, F>({
   title,
   titleModal,
-  user,
   setUser,
   configuracion,
   filtrosIniciales,
@@ -90,8 +88,6 @@ const GenericIndex = <T, F>({
         const response = await fetchData(filtros);
         if (response) {
           setData(response);
-        } else {
-          console.error("Error al obtener los datos.");
         }
       } catch (error) {
         console.error("Error al realizar la búsqueda.", error);
@@ -123,6 +119,7 @@ const GenericIndex = <T, F>({
         Correo:  "",
         Contra: "",
         Telefono: "",
+        IdPerfil: "",
         Activo: true,
     }
     setUser(item);
@@ -180,49 +177,25 @@ const GenericIndex = <T, F>({
             {title}
           </Typography>
           <Box sx={{ display: "flex", gap: 1 }}>
-          <IconButton
+          <CustomIconButton
             onClick={() => handleOpenNewModal()}
-            color="primary"
-            sx={{
-                backgroundColor: "#fff",
-                color: "#FF9800",
-                borderRadius: "50%",
-                padding: "10px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                "&:hover": { backgroundColor: "#f5f5f5" },
-              }}
+            title="Agregar nuevo"
             >
             <AddIcon />
-            </IconButton>
+            </CustomIconButton>
 
-            <IconButton
+            <CustomIconButton
               onClick={handleManualBuscar}
               title="Actualizar datos"
-              sx={{
-                backgroundColor: "#fff",
-                color: "#FF9800",
-                borderRadius: "50%",
-                padding: "10px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                "&:hover": { backgroundColor: "#f5f5f5" },
-              }}
             >
               <RefreshIcon />
-            </IconButton>
-            <IconButton
+            </CustomIconButton>
+            <CustomIconButton
               onClick={toggleDrawer}
               title="Filtros"
-              sx={{
-                backgroundColor: "#fff",
-                color: "#FF9800",
-                borderRadius: "50%",
-                padding: "10px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                "&:hover": { backgroundColor: "#f5f5f5" },
-              }}
             >
               <FilterListIcon />
-            </IconButton>
+            </CustomIconButton>
           </Box>
         </Toolbar>
       </AppBar>
@@ -255,6 +228,7 @@ const GenericIndex = <T, F>({
         )
       )}
       <GenericFormModal
+        isLoading={isLoading}
         open={isModalOpen}
         title={ (selectedItem ? "Editar " : "Crear ") + titleModal}
         onClose={handleCloseModal}

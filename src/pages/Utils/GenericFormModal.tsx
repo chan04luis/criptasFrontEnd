@@ -11,6 +11,7 @@ interface GenericFormModalProps {
   title: string;
   onClose: () => void;
   onSubmit: () => void;
+  isLoading: boolean;
   children: React.ReactNode;
 }
 
@@ -19,6 +20,7 @@ const GenericFormModal: React.FC<GenericFormModalProps> = ({
   title,
   onClose,
   onSubmit,
+  isLoading,
   children,
 }) => {
   return (
@@ -35,7 +37,7 @@ const GenericFormModal: React.FC<GenericFormModalProps> = ({
           p: 4,
         }}
       >
-        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+        <Typography variant="h6" sx={{ marginBottom: 2, textAlign: "center" }}>
           {title}
         </Typography>
         {children}
@@ -49,8 +51,8 @@ const GenericFormModal: React.FC<GenericFormModalProps> = ({
           <Button onClick={onClose} color="error" sx={{ marginRight: 1 }}>
             Cancelar
           </Button>
-          <Button onClick={onSubmit} variant="contained" color="primary">
-            Guardar
+          <Button onClick={onSubmit} disabled={isLoading} variant="contained" color="primary">
+            { isLoading ? 'Guardando..' : 'Guardar'}
           </Button>
         </Box>
       </Box>

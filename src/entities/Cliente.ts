@@ -44,12 +44,7 @@ export interface Cliente {
   }
   
   // Respuesta genérica para endpoints
-  export interface ApiResponse<T> {
-    httpCode: number;
-    hasError: boolean;
-    message: string;
-    result: T;
-  }
+  
   
   // Respuesta específica para listar clientes
   export interface ClientesListResponse {

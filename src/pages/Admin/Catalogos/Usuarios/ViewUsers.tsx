@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import { toast } from "react-toastify";
 import GenericIndex from "../../../Utils/GenericIndex";
 import GenericTable from "../../../Utils/GenericTable";
@@ -6,6 +6,7 @@ import GenericFilterForm from "../../../Utils/GenericFilterForm"; // Nuevo compo
 import { User, UserCreatePayload } from "../../../../entities/User";
 import CreateUser from "./CreateUser";
 import UserService from "../../../../services/UserService";
+import ConfirmModal from "../../../Utils/ConfirmModal";
 
 const ViewUsers = () => {
   const [currentUser, setCurrentUser] = useState<User  | UserCreatePayload >({
@@ -16,6 +17,7 @@ const ViewUsers = () => {
     Contra: "",
     Telefono: "",
     Activo: true,
+    IdPerfil:''
   });
   const initialFilters = {
     Id: "",
@@ -28,8 +30,12 @@ const ViewUsers = () => {
     field: "",
     byOrder: "",
   };
+  const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
+  const [handleDelete, setHandleDelete] = useState<(() => Promise<void>) | null>(null);
 
   const fetchUsers = async (filters: typeof initialFilters) => {
+    if(openConfirmModal)
+      return null;
     try {
       const response = await UserService.getUsersByFilters(filters);
       if (response.HasError) {
@@ -73,6 +79,7 @@ const ViewUsers = () => {
         Nombres: currentUser.Nombres,
         Apellidos: currentUser.Apellidos,
         Telefono: currentUser.Telefono,
+        IdPerfil: currentUser.IdPerfil
       });
 
       if (result.HasError) {
@@ -86,18 +93,28 @@ const ViewUsers = () => {
       console.error(error);
     }
   };
-
-  const handleDeleteUser = async (id: string): Promise<void> => {
-    try {
-      const response = await UserService.deleteUser(id);
-      if (response.HasError) {
-        toast.error(response.Message);
-      } else {
-        toast.success("Usuario eliminado con éxito");
-      }
-    } catch (error) {
-      toast.error("Error al eliminar el usuario");
+  
+  const handleDeleteConfirm = async() =>{
+    if (handleDelete) {
+      await handleDelete(); 
+      setOpenConfirmModal(false);
     }
+  }
+  const handleDeleteUser = async (id: string): Promise<void> => {
+    setHandleDelete(() => async() =>{
+      try {
+        const response = await UserService.deleteUser(id);
+        if (response.HasError) {
+          toast.error(response.Message);
+        } else {
+          toast.success("Usuario eliminado con éxito");
+        }
+      } catch (error) {
+        toast.error("Error al eliminar el usuario");
+      }
+    });
+    setOpenConfirmModal(true);
+    
   };
 
   const handleUpdateStatus = async (id: string, newStatus: string): Promise<void> => {
@@ -119,88 +136,97 @@ const ViewUsers = () => {
   };
 
   return (
-    <GenericIndex<User, typeof initialFilters>
-      title="Usuarios"
-      titleModal="Usuario"
-      user={currentUser}
-      setUser={setCurrentUser}
-      configuracion={{
-        colorPrimary: "#1976d2",
-        contrastePrimary: "#fff",
-        colorSecundario: "#0d47a1",
-        contrasteSecondario: "#fff",
-      }}
-      filtrosIniciales={initialFilters}
-      fetchData={fetchUsers}
-      insertData={handleCreateUser}
-      updateData={handleEditUser}
-      deleteData={handleDeleteUser}
-      updateStatus={handleUpdateStatus}
-      renderTable={(data, filtros, setFiltros, onEdit, onDelete, onUpdateStatus) => (
-        <GenericTable<User>
-          data={data.datos}
-          columns={[
-            { field: "Id", headerName: "Id", sortable: true, filterable:true },
-            { field: "Nombres", headerName: "Nombres", sortable: true, filterable:true },
-            { field: "Apellidos", headerName: "Apellidos", sortable: true, filterable:true },
-            { field: "Correo", headerName: "Correo", sortable: true, filterable:true },
-            { field: "Telefono", headerName: "Teléfono", sortable: true, filterable:true },
-          ]}
-          totalRecords={data.totalRegistros}
-          pageSize={filtros.numReg}
-          currentPage={filtros.numPag}
-          onPageChange={(page) => setFiltros({ ...filtros, numPag: page })}
-          onPageSizeChange={(size) =>
-            setFiltros({ ...filtros, numReg: size, numPag: 1 })
-          }
-          filters={filtros}
-          onFiltersChange={(newFilters) =>
-            setFiltros((prevFilters) => ({
-              ...prevFilters,
-              ...newFilters,
-            }))
-          }
-          onSortChange={(field, order) =>
-            setFiltros({ ...filtros, field, byOrder: order })
-          }
-          onEdit={(user) => { onEdit(user); setCurrentUser(user);}}
-          onDelete={(id) => onDelete(id)}
-          onUpdateStatus={(id, newStatus) => onUpdateStatus(id, newStatus)}
-          keyField="Id"
-        />
-      )}
-      renderForm={(onSave) => (
-        <CreateUser
-          user={currentUser}
-          setUser={setCurrentUser}
-          onSave={(currentUser) => {
-            if ("Id" in currentUser) {
-              handleEditUser(onSave);
-            } else {
-              handleCreateUser(onSave);
+    <>
+      <GenericIndex<User, typeof initialFilters>
+        title="Usuarios"
+        titleModal="Usuario"
+        user={currentUser}
+        setUser={setCurrentUser}
+        configuracion={{
+          colorPrimary: "#1976d2",
+          contrastePrimary: "#fff",
+          colorSecundario: "#0d47a1",
+          contrasteSecondario: "#fff",
+        }}
+        filtrosIniciales={initialFilters}
+        fetchData={fetchUsers}
+        insertData={handleCreateUser}
+        updateData={handleEditUser}
+        deleteData={handleDeleteUser}
+        updateStatus={handleUpdateStatus}
+        renderTable={(data, filtros, setFiltros, onEdit, onDelete, onUpdateStatus) => (
+          <GenericTable<User>
+            data={data.datos}
+            columns={[
+              { field: "Id", headerName: "Id", sortable: true, filterable:true },
+              { field: "Nombres", headerName: "Nombres", sortable: true, filterable:true },
+              { field: "Apellidos", headerName: "Apellidos", sortable: true, filterable:true },
+              { field: "Correo", headerName: "Correo", sortable: true, filterable:true },
+              { field: "Telefono", headerName: "Teléfono", sortable: true, filterable:true },
+            ]}
+            totalRecords={data.totalRegistros}
+            pageSize={filtros.numReg}
+            currentPage={filtros.numPag}
+            onPageChange={(page) => setFiltros({ ...filtros, numPag: page })}
+            onPageSizeChange={(size) =>
+              setFiltros({ ...filtros, numReg: size, numPag: 1 })
             }
-          }}
-        />
-      )}
-      renderFilterForm={(filtros, setFiltros, fetchUsers, toggleDrawer, isDrawerOpen) => (
-        <GenericFilterForm
-          filters={filtros}
-          setFilters={setFiltros}
-          onSearch={fetchUsers}
-          isDrawerOpen={isDrawerOpen}
-          toggleDrawer={toggleDrawer}
-          fields={[
-            { type: "text", name: "Id", label: "Id", value: filtros.Id },
-            { type: "text", name: "Nombres", label: "Nombres", value: filtros.Nombres },
-            { type: "text", name: "Apellidos", label: "Apellidos", value: filtros.Apellidos },
-            { type: "autocomplete", name: "Estatus", label: "Estatus", value: filtros.Estatus, options: [
-              { id: true, label: "Activo" },
-              { id: false, label: "Desactivado" },
-            ] },
-          ]}
-        />
-      )}
-    />
+            filters={filtros}
+            onFiltersChange={(newFilters) =>
+              setFiltros((prevFilters) => ({
+                ...prevFilters,
+                ...newFilters,
+              }))
+            }
+            onSortChange={(field, order) =>
+              setFiltros({ ...filtros, field, byOrder: order })
+            }
+            onEdit={(user) => { onEdit(user); setCurrentUser(user);}}
+            onDelete={(id) => onDelete(id)}
+            onUpdateStatus={(id, newStatus) => onUpdateStatus(id, newStatus)}
+            keyField="Id"
+          />
+        )}
+        renderForm={(onSave) => (
+          <CreateUser
+            user={currentUser}
+            setUser={setCurrentUser}
+            onSave={(currentUser) => {
+              if ("Id" in currentUser) {
+                handleEditUser(onSave);
+              } else {
+                handleCreateUser(onSave);
+              }
+            }}
+          />
+        )}
+        renderFilterForm={(filtros, setFiltros, fetchUsers, toggleDrawer, isDrawerOpen) => (
+          <GenericFilterForm
+            filters={filtros}
+            setFilters={setFiltros}
+            onSearch={fetchUsers}
+            isDrawerOpen={isDrawerOpen}
+            toggleDrawer={toggleDrawer}
+            fields={[
+              { type: "text", name: "Id", label: "Id", value: filtros.Id },
+              { type: "text", name: "Nombres", label: "Nombres", value: filtros.Nombres },
+              { type: "text", name: "Apellidos", label: "Apellidos", value: filtros.Apellidos },
+              { type: "autocomplete", name: "Estatus", label: "Estatus", value: filtros.Estatus, options: [
+                { id: true, label: "Activo" },
+                { id: false, label: "Desactivado" },
+              ] },
+            ]}
+          />
+        )}
+      />
+      <ConfirmModal
+        open={openConfirmModal}
+        onClose={() => setOpenConfirmModal(false)}
+        onConfirm={handleDeleteConfirm}
+        title="Confirmar eliminación"
+        message={`¿Estás seguro de que deseas eliminar al usuario?`}
+      />
+    </>
   );
 };
 

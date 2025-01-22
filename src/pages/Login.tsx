@@ -19,13 +19,13 @@ const Login = () => {
       return;
     }
 
-    const userCredentials = { Correo: email, Contra: password };
+    const userCredentials = { Correo: email, Password: password };
 
     try {
-      const response = await axios.patch(`${apiUrl}/Login`, userCredentials, {
+      const response = await axios.post(`${apiUrl}/autenticacion/login`, userCredentials, {
         headers: {
           'accept': 'text/plain',
-          'Content-Type': 'application/json-patch+json',
+          'Content-Type': 'application/json-post+json',
         }
       });
 
@@ -34,8 +34,7 @@ const Login = () => {
       } else {
         const token = response.data.Result.Token;
         if (token) {
-            toast.success('Login Exitoso');
-            updateToken(token, response.data.Result.Id);
+            updateToken(token, response.data.Result);
         } else {
           toast.error('No se recibió un token');
         }

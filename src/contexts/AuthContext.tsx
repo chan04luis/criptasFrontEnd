@@ -1,23 +1,14 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
-import { apiUrl } from "../config/globals";
-// Definimos la estructura de los datos del usuario que se obtendrán de la API
-interface User {
-  Id: string;
-  Nombres: string;
-  Apellidos: string;
-  Correo: string;
-  Contra: string;
-  Telefono: string;
-  Activo: boolean;
-  FechaRegistro: string;
-  FechaActualizacion: string;
-}
+import { RootObject } from "../entities/Seguridad/RootObject";
+import { AutenticationService } from "../services/Seguridad/AutenticationService";
+import { Usuario } from "../entities/Usuario";
 
 // Definimos la estructura del contexto
 interface AuthContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: Usuario | null;
+  setUser: (user: Usuario | null) => void;
   logout: () => void;
+  result : RootObject | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,46 +18,33 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Usuario | null>(null);
+  const [result, setResult] = useState<RootObject | null>(null);
 
   // Obtener el token desde localStorage
   const getToken = () => localStorage.getItem("authToken");
-  const getId = () => localStorage.getItem("authId");
   useEffect(() => {
     const fetchUserData = async () => {
       const token = getToken();
-      const id = getId();
       if (!token) {
-        return; // Si no hay token, no hacemos la solicitud
+        return; 
+      }else if(token == undefined || token == "undefined"){
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("authId");
+        window.location.href = "/login"; 
       }
-
       try {
-        const response = await fetch(
-        `${apiUrl}/Usuarios/${id}`,
-          {
-            method: "GET",
-            headers: {
-              accept: "text/plain",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.status === 401) {
-          // Si la respuesta es 401, eliminamos el token y redirigimos o hacemos lo que sea necesario
+        const response = await AutenticationService.get();
+        if(response != null && response != undefined && response.Result != null && response.Result != undefined){
+          const result : RootObject = response.Result;
+          setUser(result.Usuario);
+          setResult(result);
+          localStorage.setItem('authToken', result.Token);
+          localStorage.setItem('authResult', JSON.stringify(result));
+        }else{
           localStorage.removeItem("authToken");
           localStorage.removeItem("authId");
-          window.location.href = "/login"; // Redirigir a la página de login
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error("Error al obtener el usuario");
-        }
-
-        const data = await response.json();
-        if (!data.HasError) {
-          setUser(data.Result); // Establecer los datos del usuario en el estado
+          window.location.href = "/login"; 
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -85,7 +63,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, logout, result }}>
       {children}
     </AuthContext.Provider>
   );

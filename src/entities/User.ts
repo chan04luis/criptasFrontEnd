@@ -5,6 +5,7 @@ export interface User {
     Correo: string;
     Contra?: string;
     Telefono: string;
+    IdPerfil: String;
     Activo: boolean;
     FechaRegistro: string;
     FechaActualizacion: string;
@@ -16,11 +17,13 @@ export interface User {
     Correo: string;
     Contra?: string;
     Telefono: string;
+    IdPerfil: String;
     Activo: boolean;
   }
   
   export interface UserUpdatePayload {
     Id: string;
+    IdPerfil: String;
     Nombres: string;
     Apellidos: string;
     Telefono: string;
@@ -38,10 +41,5 @@ export interface User {
     Estatus: boolean;
   }
   
-  export interface ApiResponse<T> {
-    HttpCode: number;
-    HasError: boolean;
-    Message: string;
-    Result: T;
-  }
+
   

@@ -17,24 +17,32 @@ import {
 import {
   ExpandLess,
   ExpandMore,
-  People,
-  Group,
   Logout,
   Menu as MenuIcon,
 } from "@mui/icons-material";
 import { Routes, Route, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext"; 
 import ViewUsers from "./Admin/Catalogos/Usuarios/ViewUsers";
-import CreateUser from "./Admin/Catalogos/Usuarios/CreateUser";
 import { ToastContainer } from 'react-toastify';
+import ViewConfigs from "./Admin/Seguridad/Configuraciones/ViewConfigs";
+import ElementosSistema from "./Admin/Seguridad/Modulos/ElementosSistema";
+import IndexPerfil from "./Admin/Seguridad/Perfil/IndexPerfil";
+import PermisosPerfil from "./Admin/Seguridad/Permisos/PermisosPerfil";
 
 const AdminDrawer = ({
-  user,
+  result,
   currentTime,
-  toggleCatalogo,
-  catalogoOpen,
   logout,
-}: any) => (
+}: any) =>{
+  
+  const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
+  const toggleSection = (section: string) => {
+    setOpenSections((prevState) => ({
+      ...prevState,
+      [section]: !prevState[section],
+    }));
+  };
+  return (
   <Box sx={{ width: 240 }}>
     <Box
       sx={{
@@ -42,37 +50,56 @@ const AdminDrawer = ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        bgcolor: "#283593",
-        color: "white",
+        bgcolor: result?.Configuracion.ColorPrimario,
+        color: result?.Configuracion.ContrastePrimario,
       }}
     >
-      <Avatar sx={{ bgcolor: "#ffb74d", mb: 1 }}>
-        {user?.Nombres?.[0] || "A"}
+      <Avatar sx={{ bgcolor: result?.Configuracion.ColorSecundario, mb: 1 }}>
+        {result?.Usuario?.Nombres?.[0] || "A"}
       </Avatar>
       <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-        {user?.Nombres || "Usuario"} {user?.Apellidos || "Usuario"}
+        {result?.Usuario?.Nombres || "Usuario"} {result?.Usuario?.Apellidos || "Usuario"}
       </Typography>
       <Typography variant="body2">{currentTime}</Typography>
     </Box>
-    <Divider sx={{ bgcolor: "white" }} />
+    <Divider sx={{ bgcolor: result?.Configuracion.ContrastePrimario }} />
 
     <List>
-      <ListItemButton onClick={toggleCatalogo}>
-        <ListItemText primary="Catálogos" />
-        {catalogoOpen ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={catalogoOpen} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton component={Link} to="/admin/usuarios" sx={{ pl: 4 }}>
-            <Group sx={{ marginRight: 1 }} />
-            <ListItemText primary="Usuarios" />
-          </ListItemButton>
-          <ListItemButton component={Link} to="/admin/clientes" sx={{ pl: 4 }}>
-            <People sx={{ marginRight: 1 }} />
-            <ListItemText primary="Clientes" />
-          </ListItemButton>
-        </List>
-      </Collapse>
+
+      {result?.Menu && Object.entries(result?.Menu).map(([key, section]: any) => {
+        if (key === '_paths') return null; // Excluir "_paths" del menú
+
+        const { nombre, mostrar, _paginas } = section;
+        if (!mostrar) return null; // Si no se debe mostrar, omitir
+
+        return (
+          <div key={key}>
+            <ListItemButton onClick={() => toggleSection(key)}>
+              <ListItemText primary={nombre} />
+              {openSections[key] ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={openSections[key]} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {Object.entries(_paginas).map(([pageKey, pagina]: any) => {
+                  const { nombre: pageName, path, mostrar: showPage } = pagina;
+                  if (!showPage) return null; // Si no se debe mostrar la página, omitir
+
+                  return (
+                    <ListItemButton
+                      key={pageKey}
+                      component={Link}
+                      to={'/admin'+path}
+                      sx={{ pl: 4 }}
+                    >
+                      <ListItemText primary={pageName} />
+                    </ListItemButton>
+                  );
+                })}
+              </List>
+            </Collapse>
+          </div>
+        );
+      })}
 
       <Divider sx={{ my: 1, bgcolor: "white" }} />
 
@@ -83,14 +110,15 @@ const AdminDrawer = ({
     </List>
   </Box>
 );
+}
 
 const Admin = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { logout, user } = useAuth(); // Usar el hook de context directamente
+  const { logout, result } = useAuth(); // Usar el hook de context directamente
   const [currentTime, setCurrentTime] = useState("");
   const [catalogoOpen, setCatalogoOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 600px)");
-
+  
   useEffect(() => {
     const updateCurrentTime = () => {
       const now = new Date();
@@ -121,7 +149,7 @@ const Admin = () => {
         position="fixed"
         sx={{
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          backgroundColor: "#3f51b5",
+          backgroundColor: result?.Configuracion.ColorPrimario,
         }}
       >
         <Toolbar>
@@ -145,15 +173,15 @@ const Admin = () => {
           "& .MuiDrawer-paper": {
             width: 240,
             boxSizing: "border-box",
-            bgcolor: "#3f51b5",
-            color: "white",
+            bgcolor:  result?.Configuracion.ColorPrimario,
+            color: result?.Configuracion.ContrastePrimario,
             marginTop: isMobile ? "54px" : "64px",
             transform: !drawerOpen ? "translateX(0)" : "translateX(-240px)",
           },
         }}
       >
         <AdminDrawer
-          user={user} // Contexto de usuario
+          result={result} // Contexto de usuario
           currentTime={currentTime}
           toggleCatalogo={toggleCatalogo}
           catalogoOpen={catalogoOpen}
@@ -173,7 +201,7 @@ const Admin = () => {
         }}
       >
         <Routes>
-          <Route path="usuarios" element={<ViewUsers />} />
+          <Route path="seguridad/usuarios" element={<ViewUsers />} />
           <Route
             path="clientes"
             element={
@@ -182,6 +210,13 @@ const Admin = () => {
               </div>
             }
           />
+          <Route path="seguridad/config-general" element={<ViewConfigs parentConfig={result?.Configuracion} />} />
+          
+          <Route path="seguridad/elementos-sistema" element={<ElementosSistema parentConfig={result?.Configuracion} />} />
+
+          <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
+          
+          <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil />} />
         </Routes>
         <ToastContainer position="top-right" autoClose={5000} />
       </Box>

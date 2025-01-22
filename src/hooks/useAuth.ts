@@ -10,11 +10,16 @@ export const useAuth = () => {
     }
   }, []);
 
-  const updateToken = (newToken: string, id:string) => {
+  const updateToken = (newToken: string, result:any) => {
     localStorage.setItem('authToken', newToken);
-    localStorage.setItem('authId', id);
+    localStorage.setItem('authResult', JSON.stringify(result));
     setToken(newToken);
     window.location.href = '/admin';
+  };
+
+  const refreshToken = (newToken: string, result:any) => {
+    localStorage.setItem('authToken', newToken);
+    localStorage.setItem('authResult', JSON.stringify(result));
   };
 
   const logout = () => {
@@ -22,5 +27,5 @@ export const useAuth = () => {
     setToken(null);
   };
 
-  return { token, updateToken, logout };
+  return { token, updateToken, logout, refreshToken };
 };

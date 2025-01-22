@@ -3,11 +3,11 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    "module": "commonjs", // Cambiado a CommonJS para habilitar `require`
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node", // Cambiado a "node" para soporte completo de módulos
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -18,7 +18,9 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true, // Habilita interoperabilidad con módulos CommonJS
+    "allowSyntheticDefaultImports": true // Permite importar módulos CommonJS como si fueran ESModules
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

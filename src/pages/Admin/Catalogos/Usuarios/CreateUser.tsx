@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Box, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, TextField, Autocomplete } from "@mui/material";
 import { User, UserCreatePayload } from "../../../../entities/User";
+import PerfilService from "../../../../services/Seguridad/PerfilService";
 
 interface CreateUserProps {
   user: User | UserCreatePayload ; // Usuario para editar o `null` para crear
@@ -9,6 +10,26 @@ interface CreateUserProps {
 }
 
 const CreateUser: React.FC<CreateUserProps> = ({ user, onSave, setUser }) => {
+  const [perfiles, setPerfiles] = useState<{ id: string; label: string }[]>([]);
+
+  useEffect(() => {
+    const fetchPerfiles = async () => {
+      try {
+        const response = await PerfilService.get();
+        if (!response.HasError && response.Result) {
+          const formattedPerfiles = response.Result.map((perfil) => ({
+            id: perfil.IdPerfil,
+            label: perfil.NombrePerfil,
+          }));
+          setPerfiles(formattedPerfiles);
+        }
+      } catch (error) {
+        console.error("Error fetching perfiles:", error);
+      }
+    };
+
+    fetchPerfiles();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -37,6 +58,24 @@ const CreateUser: React.FC<CreateUserProps> = ({ user, onSave, setUser }) => {
           value={user.Apellidos}
           onChange={handleChange}
           fullWidth
+        />
+        <Autocomplete
+          options={perfiles}
+          getOptionLabel={(option) => option.label}
+          value={
+            perfiles.find((perfil) => perfil.id === user.IdPerfil) || null
+          }
+          onChange={(_, newValue) => {
+            setUser({
+              ...user,
+              IdPerfil: newValue?.id || "",
+            });
+          }}
+          renderInput={(params) => (
+            <TextField {...params} label="Perfil" fullWidth />
+          )}
+          fullWidth
+          sx={{ marginY: 2 }}
         />
         <TextField
           label="Correo"
