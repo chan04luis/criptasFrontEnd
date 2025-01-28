@@ -8,7 +8,7 @@ import {
   Toolbar,
   IconButton,
 } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import SaveIcon from '@mui/icons-material/Save';
 import { toast } from 'react-toastify';
 import ConfiguracionService from '../../../../services/Seguridad/ConfiguracionService';
 import { Configuracion } from '../../../../entities/Seguridad/Configuracion';
@@ -112,7 +112,7 @@ const ViewConfigs: React.FC<ViewConfigsProps> = ({parentConfig}) => {
             }}
             disabled={loading}
           >
-            <RefreshIcon />
+            <SaveIcon />
           </IconButton>
         </Toolbar>
       </AppBar>

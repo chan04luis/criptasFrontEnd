@@ -6,6 +6,7 @@ import {
   UserUpdatePayload,
   UserUpdateStatusPayload,
   UserFilterPayload,
+  UserChangePassPayload,
 } from '../entities/User';
 import {GenericService } from '../services/GenericService'
 import { ApiResponse } from '../entities/ApiResponse';
@@ -38,6 +39,15 @@ export class UserService {
   static async updateUserStatus(payload: UserUpdateStatusPayload): Promise<ApiResponse<User>> {
     try {
       const response = await axios.put(`${apiUrl}/Usuarios/UpdateStatus`, payload, { headers });
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  static async updateUserPassword(payload: UserChangePassPayload): Promise<ApiResponse<boolean>> {
+    try {
+      const response = await axios.put(`${apiUrl}/Usuarios/UpdatePassword`, payload, { headers });
       return response.data;
     } catch (error) {
       return this.handleError(error);

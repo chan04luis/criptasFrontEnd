@@ -28,13 +28,14 @@ import ViewConfigs from "./Admin/Seguridad/Configuraciones/ViewConfigs";
 import ElementosSistema from "./Admin/Seguridad/Modulos/ElementosSistema";
 import IndexPerfil from "./Admin/Seguridad/Perfil/IndexPerfil";
 import PermisosPerfil from "./Admin/Seguridad/Permisos/PermisosPerfil";
+import ChangePass from "./Admin/Seguridad/Configuraciones/changePass";
 
 const AdminDrawer = ({
   result,
   currentTime,
   logout,
 }: any) =>{
-  
+  window.document.title = result?.Configuracion.TituloNavegador;
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
   const toggleSection = (section: string) => {
     setOpenSections((prevState) => ({
@@ -213,6 +214,8 @@ const Admin = () => {
           <Route path="seguridad/config-general" element={<ViewConfigs parentConfig={result?.Configuracion} />} />
           
           <Route path="seguridad/elementos-sistema" element={<ElementosSistema parentConfig={result?.Configuracion} />} />
+          
+          <Route path="seguridad/cambio_contra" element={<ChangePass parentConfig={result?.Configuracion} user={result?.Usuario} />} />
 
           <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
           

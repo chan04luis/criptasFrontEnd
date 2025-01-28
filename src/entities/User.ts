@@ -41,5 +41,12 @@ export interface User {
     Estatus: boolean;
   }
   
+  export interface UserChangePassPayload {
+    Id: string| undefined | null;
+    Email: string | undefined;
+    Contra: string;
+    NewContra: string;
+    ConfirmNewContra: string;
+  }
 
   
