@@ -29,6 +29,8 @@ import ElementosSistema from "./Admin/Seguridad/Modulos/ElementosSistema";
 import IndexPerfil from "./Admin/Seguridad/Perfil/IndexPerfil";
 import PermisosPerfil from "./Admin/Seguridad/Permisos/PermisosPerfil";
 import ChangePass from "./Admin/Seguridad/Configuraciones/changePass";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
 
 const AdminDrawer = ({
   result,
@@ -44,73 +46,75 @@ const AdminDrawer = ({
     }));
   };
   return (
-  <Box sx={{ width: 240 }}>
-    <Box
-      sx={{
-        p: 2,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        bgcolor: result?.Configuracion.ColorPrimario,
-        color: result?.Configuracion.ContrastePrimario,
-      }}
-    >
-      <Avatar sx={{ bgcolor: result?.Configuracion.ColorSecundario, mb: 1 }}>
-        {result?.Usuario?.Nombres?.[0] || "A"}
-      </Avatar>
-      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-        {result?.Usuario?.Nombres || "Usuario"} {result?.Usuario?.Apellidos || "Usuario"}
-      </Typography>
-      <Typography variant="body2">{currentTime}</Typography>
-    </Box>
-    <Divider sx={{ bgcolor: result?.Configuracion.ContrastePrimario }} />
+    <PerfectScrollbar>
+      <Box sx={{ width: 240 }}>
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            bgcolor: result?.Configuracion.ColorPrimario,
+            color: result?.Configuracion.ContrastePrimario,
+          }}
+        >
+          <Avatar sx={{ bgcolor: result?.Configuracion.ColorSecundario, mb: 1 }}>
+            {result?.Usuario?.Nombres?.[0] || "A"}
+          </Avatar>
+          <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            {result?.Usuario?.Nombres || "Usuario"} {result?.Usuario?.Apellidos || "Usuario"}
+          </Typography>
+          <Typography variant="body2">{currentTime}</Typography>
+        </Box>
+        <Divider sx={{ bgcolor: result?.Configuracion.ContrastePrimario }} />
 
-    <List>
+        <List>
 
-      {result?.Menu && Object.entries(result?.Menu).map(([key, section]: any) => {
-        if (key === '_paths') return null; // Excluir "_paths" del menú
+          {result?.Menu && Object.entries(result?.Menu).map(([key, section]: any) => {
+            if (key === '_paths') return null; // Excluir "_paths" del menú
 
-        const { nombre, mostrar, _paginas } = section;
-        if (!mostrar) return null; // Si no se debe mostrar, omitir
+            const { nombre, mostrar, _paginas } = section;
+            if (!mostrar) return null; // Si no se debe mostrar, omitir
 
-        return (
-          <div key={key}>
-            <ListItemButton onClick={() => toggleSection(key)}>
-              <ListItemText primary={nombre} />
-              {openSections[key] ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={openSections[key]} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                {Object.entries(_paginas).map(([pageKey, pagina]: any) => {
-                  const { nombre: pageName, path, mostrar: showPage } = pagina;
-                  if (!showPage) return null; // Si no se debe mostrar la página, omitir
+            return (
+              <div key={key}>
+                <ListItemButton onClick={() => toggleSection(key)}>
+                  <ListItemText primary={nombre} />
+                  {openSections[key] ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={openSections[key]} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {Object.entries(_paginas).map(([pageKey, pagina]: any) => {
+                      const { nombre: pageName, path, mostrar: showPage } = pagina;
+                      if (!showPage) return null; // Si no se debe mostrar la página, omitir
 
-                  return (
-                    <ListItemButton
-                      key={pageKey}
-                      component={Link}
-                      to={'/admin'+path}
-                      sx={{ pl: 4 }}
-                    >
-                      <ListItemText primary={pageName} />
-                    </ListItemButton>
-                  );
-                })}
-              </List>
-            </Collapse>
-          </div>
-        );
-      })}
+                      return (
+                        <ListItemButton
+                          key={pageKey}
+                          component={Link}
+                          to={'/admin'+path}
+                          sx={{ pl: 4 }}
+                        >
+                          <ListItemText primary={pageName} />
+                        </ListItemButton>
+                      );
+                    })}
+                  </List>
+                </Collapse>
+              </div>
+            );
+          })}
 
-      <Divider sx={{ my: 1, bgcolor: "white" }} />
+          <Divider sx={{ my: 1, bgcolor: "white" }} />
 
-      <ListItemButton onClick={logout}>
-        <Logout sx={{ marginRight: 1 }} />
-        <ListItemText primary="Cerrar sesión" />
-      </ListItemButton>
-    </List>
-  </Box>
-);
+          <ListItemButton onClick={logout}>
+            <Logout sx={{ marginRight: 1 }} />
+            <ListItemText primary="Cerrar sesión" />
+          </ListItemButton>
+        </List>
+      </Box>
+    </PerfectScrollbar>
+  );
 }
 
 const Admin = () => {
@@ -189,40 +193,41 @@ const Admin = () => {
           logout={logout}
         />
       </Drawer>
+      <PerfectScrollbar>
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            backgroundColor: "#f2f2f2",
+            p: 0,
+            marginLeft: isMobile ? 0 : drawerOpen ? 0 : "240px",
+            marginTop: "64px",
+            overflow: "auto",
+          }}
+        >
+          <Routes>
+            <Route path="seguridad/usuarios" element={<ViewUsers />} />
+            <Route
+              path="clientes"
+              element={
+                <div>
+                  <Typography variant="h5">Catálogo de Clientes</Typography>
+                </div>
+              }
+            />
+            <Route path="seguridad/config-general" element={<ViewConfigs parentConfig={result?.Configuracion} />} />
+            
+            <Route path="seguridad/elementos-sistema" element={<ElementosSistema parentConfig={result?.Configuracion} />} />
+            
+            <Route path="seguridad/cambio_contra" element={<ChangePass parentConfig={result?.Configuracion} user={result?.Usuario} />} />
 
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          backgroundColor: "#f2f2f2",
-          p: 0,
-          marginLeft: isMobile ? 0 : drawerOpen ? 0 : "240px",
-          marginTop: "64px",
-          overflow: "auto",
-        }}
-      >
-        <Routes>
-          <Route path="seguridad/usuarios" element={<ViewUsers />} />
-          <Route
-            path="clientes"
-            element={
-              <div>
-                <Typography variant="h5">Catálogo de Clientes</Typography>
-              </div>
-            }
-          />
-          <Route path="seguridad/config-general" element={<ViewConfigs parentConfig={result?.Configuracion} />} />
-          
-          <Route path="seguridad/elementos-sistema" element={<ElementosSistema parentConfig={result?.Configuracion} />} />
-          
-          <Route path="seguridad/cambio_contra" element={<ChangePass parentConfig={result?.Configuracion} user={result?.Usuario} />} />
-
-          <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
-          
-          <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil />} />
-        </Routes>
-        <ToastContainer position="top-right" autoClose={5000} />
-      </Box>
+            <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
+            
+            <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil />} />
+          </Routes>
+          <ToastContainer position="top-right" autoClose={5000} />
+        </Box>
+      </PerfectScrollbar>
     </Box>
   );
 };
