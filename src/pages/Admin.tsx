@@ -32,6 +32,8 @@ import ChangePass from "./Admin/Seguridad/Configuraciones/changePass";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import IndexIglesias from "./Admin/Catalogos/Iglesias/IndexIglesias";
+import IndexZonas from "./Admin/Catalogos/Zonas/IndexZonas";
+import IndexSecciones from "./Admin/Catalogos/Secciones/IndexSecciones";
 
 const AdminDrawer = ({
   result,
@@ -226,6 +228,10 @@ const Admin = () => {
             <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil />} />
 
             <Route path="catalogos/iglesias" element={<IndexIglesias parentConfig={result?.Configuracion} />} />
+
+            <Route path="catalogos/zonas/:id" element={<IndexZonas parentConfig={result?.Configuracion} />} />
+
+            <Route path="catalogos/secciones/:id" element={<IndexSecciones parentConfig={result?.Configuracion} />} />
           </Routes>
           <ToastContainer position="top-right" autoClose={5000} />
         </Box>

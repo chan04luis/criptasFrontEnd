@@ -32,6 +32,9 @@ import { IglesiaCreate } from "../../../../entities/catalogos/iglesias/IglesiaCr
 import { IglesiaUpdate } from "../../../../entities/catalogos/iglesias/IglesiaUpdate";
 import { IglesiaUpdateMaps } from "../../../../entities/catalogos/iglesias/IglesiaUpdateMaps";
 import IglesiaService from "../../../../services/Catalogos/IglesiaService";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import { useNavigate } from "react-router-dom";
+import CustomIconButton from "../../../Utils/CustomIconButton";
 
 interface IndexIglesiasProps {
   parentConfig: Configuracion | undefined;
@@ -85,12 +88,13 @@ const IndexIglesias: React.FC<IndexIglesiasProps> = ({ parentConfig }) => {
     return "Id" in iglesia;
   };
   
+  const navigate = useNavigate();
 
   const handleOpenLocationModal = (iglesia: Iglesia) => {
     setSelectedLocation({
       Id: iglesia.Id,
-      Latitud: "",
-      Longitud: "",
+      Latitud: iglesia.Latitud,
+      Longitud: iglesia.Longitud,
     });
     setOpenLocationModal(true);
   };
@@ -175,12 +179,15 @@ const IndexIglesias: React.FC<IndexIglesiasProps> = ({ parentConfig }) => {
           <Typography variant="h6" sx={{ flexGrow: 1, color: parentConfig?.ContrasteSecundario || "#ffffff" }}>
             Iglesias
           </Typography>
-          <IconButton onClick={() => handleOpenModal(null)} title="Agregar" sx={{ color: "#fff" }}>
-            <AddIcon />
-          </IconButton>
-          <IconButton onClick={fetchIglesias} title="Refrescar" sx={{ color: "#fff" }}>
-            <RefreshIcon />
-          </IconButton>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <CustomIconButton onClick={() => handleOpenModal(null)} title="Agregar">
+                <AddIcon />
+            </CustomIconButton>
+            <CustomIconButton onClick={fetchIglesias} title="Refrescar">
+                <RefreshIcon />
+            </CustomIconButton>
+          </Box>
+          
         </Toolbar>
       </AppBar>
 
@@ -216,6 +223,13 @@ const IndexIglesias: React.FC<IndexIglesiasProps> = ({ parentConfig }) => {
                       <IconButton onClick={() => handleDeleteIglesia(iglesia.Id)} title="Eliminar" sx={{ color: "red" }}>
                         <DeleteForeverIcon />
                       </IconButton>
+                      <IconButton
+                        onClick={() => navigate(`/admin/catalogos/zonas/${iglesia.Id}`)}
+                        title="Gestión de Iglesia"
+                        >
+                        <AdminPanelSettingsIcon />
+                        </IconButton>
+
                     </TableCell>
                   </TableRow>
                 ))}
