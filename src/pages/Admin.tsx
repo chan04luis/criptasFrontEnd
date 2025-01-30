@@ -194,7 +194,6 @@ const Admin = () => {
           logout={logout}
         />
       </Drawer>
-      <PerfectScrollbar>
         <Box
           component="main"
           sx={{
@@ -230,7 +229,6 @@ const Admin = () => {
           </Routes>
           <ToastContainer position="top-right" autoClose={5000} />
         </Box>
-      </PerfectScrollbar>
     </Box>
   );
 };
