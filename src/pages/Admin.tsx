@@ -31,6 +31,7 @@ import PermisosPerfil from "./Admin/Seguridad/Permisos/PermisosPerfil";
 import ChangePass from "./Admin/Seguridad/Configuraciones/changePass";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import IndexIglesias from "./Admin/Catalogos/Iglesias/IndexIglesias";
 
 const AdminDrawer = ({
   result,
@@ -224,6 +225,8 @@ const Admin = () => {
             <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
             
             <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil />} />
+
+            <Route path="catalogos/iglesias" element={<IndexIglesias parentConfig={result?.Configuracion} />} />
           </Routes>
           <ToastContainer position="top-right" autoClose={5000} />
         </Box>
