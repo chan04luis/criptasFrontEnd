@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
-  IconButton,
   Tooltip,
   Grid,
-  Modal,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CriptasService from "../../../../services/Catalogos/CriptasService";
@@ -19,7 +17,7 @@ interface CriptasModalProps {
   parentConfig: any;
 }
 
-const CriptasModal: React.FC<CriptasModalProps> = ({ idSeccion, parentConfig }) => {
+const CriptasModal: React.FC<CriptasModalProps> = ({ idSeccion }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [criptas, setCriptas] = useState<Criptas[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -79,8 +77,6 @@ const CriptasModal: React.FC<CriptasModalProps> = ({ idSeccion, parentConfig }) 
     handleCloseModal();
   };
 
-  const gridColumns = 3; // Matriz de 3 columnas
-  const numRows = Math.ceil((criptas.length + 1) / gridColumns);
 
   return (
     <Box
@@ -94,7 +90,7 @@ const CriptasModal: React.FC<CriptasModalProps> = ({ idSeccion, parentConfig }) 
     >
 
       <Grid container spacing={2} justifyContent="center">
-        {criptas.map((cripta, index) => (
+        {criptas.map((cripta) => (
           <Grid item key={cripta.Id} xs={4} sm={3} md={3}>
             <Tooltip title={cripta.UbicacionEspecifica}>
               <Box

@@ -8,7 +8,7 @@ interface UpdateIglesiaMapsProps {
   onSave: () => void;
 }
 
-const UpdateIglesiaMaps: React.FC<UpdateIglesiaMapsProps> = ({ iglesia, setIglesia, onSave }) => {
+const UpdateIglesiaMaps: React.FC<UpdateIglesiaMapsProps> = ({ iglesia, setIglesia }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);

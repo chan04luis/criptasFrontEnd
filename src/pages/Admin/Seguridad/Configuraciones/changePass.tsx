@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import {
   TextField,
   Typography,
@@ -13,7 +13,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { toast } from 'react-toastify';
-import ConfiguracionService from '../../../../services/Seguridad/ConfiguracionService';
 import { Configuracion } from '../../../../entities/Seguridad/Configuracion';
 import { Usuario } from '../../../../entities/Usuario';
 import { UserChangePassPayload } from '../../../../entities/User';
