@@ -226,6 +226,12 @@ const Admin = () => {
             <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
             
             <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil config={result?.Configuracion} />} />
+
+            <Route path="catalogos/iglesias" element={<IndexIglesias parentConfig={result?.Configuracion} />} />
+
+            <Route path="catalogos/zonas/:id" element={<IndexZonas parentConfig={result?.Configuracion} />} />
+
+            <Route path="catalogos/secciones/:id" element={<IndexSecciones parentConfig={result?.Configuracion} />} />
           </Routes>
           <ToastContainer position="top-right" autoClose={5000} />
         </Box>
