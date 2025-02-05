@@ -64,26 +64,26 @@ const UpdateIglesiaMaps: React.FC<UpdateIglesiaMapsProps> = ({ iglesia, setIgles
   };
 
   return (
-    <Box sx={{ padding: 2 }}>
-      <TextField
-        label="Latitud"
-        name="Latitud"
-        value={iglesia.Latitud}
-        onChange={handleChange}
-        fullWidth
-        required
-        sx={{ marginBottom: 2 }}
-      />
-      <TextField
-        label="Longitud"
-        name="Longitud"
-        value={iglesia.Longitud}
-        onChange={handleChange}
-        fullWidth
-        required
-        sx={{ marginBottom: 2 }}
-      />
-      <Box ref={mapRef} sx={{ width: "100%", height: "400px", borderRadius: 2, border: "1px solid #ddd" }} />
+    <Box sx={{ padding: 0 }}>
+      <Box sx={{ display: "flex", gap: 2, marginBottom: 2 }}>
+        <TextField
+          label="Latitud"
+          name="Latitud"
+          value={iglesia.Latitud}
+          onChange={handleChange}
+          fullWidth
+          required
+        />
+        <TextField
+          label="Longitud"
+          name="Longitud"
+          value={iglesia.Longitud}
+          onChange={handleChange}
+          fullWidth
+          required
+        />
+      </Box>
+      <Box ref={mapRef} sx={{ width: "100%", height: "300px", borderRadius: 2, border: "1px solid #ddd" }} />
     </Box>
   );
 };

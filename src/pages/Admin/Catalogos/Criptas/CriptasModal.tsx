@@ -50,6 +50,7 @@ const CriptasModal: React.FC<CriptasModalProps> = ({ idSeccion }) => {
         IdSeccion: idSeccion,
         IdCliente: '2c8e4ed9-d81c-4d0c-a30f-1a8e96e73fc6',
         Numero: "",
+        Precio: 0.0,
         UbicacionEspecifica: "",
         Estatus: true,
         FechaRegistro: "",
@@ -64,8 +65,17 @@ const CriptasModal: React.FC<CriptasModalProps> = ({ idSeccion }) => {
     setSelectedCripta(null);
   };
 
+  const formatPrice = (value: number, currency: string = "MXN", locale: string = "es-MX"): string => {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 2,
+    }).format(value);
+  };
+
   const handleSaveCripta = async () => {
     if (selectedCripta) {
+      selectedCripta.Precio = Number(selectedCripta.Precio);
       const result = await CriptasService.createOrUpdateCripta(selectedCripta);
       if (result.HasError) {
         toast.error(result.Message || "Error al guardar la cripta.");
@@ -92,7 +102,7 @@ const CriptasModal: React.FC<CriptasModalProps> = ({ idSeccion }) => {
       <Grid container spacing={2} justifyContent="center">
         {criptas.map((cripta) => (
           <Grid item key={cripta.Id} xs={4} sm={3} md={3}>
-            <Tooltip title={cripta.UbicacionEspecifica}>
+            <Tooltip title={cripta.UbicacionEspecifica + ' - ' + formatPrice(cripta.Precio)}>
               <Box
                 sx={{
                   width: "100%",

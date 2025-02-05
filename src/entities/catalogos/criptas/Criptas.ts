@@ -3,6 +3,7 @@ export interface Criptas{
     IdSeccion : string | undefined;
     IdCliente : string | undefined;
     Numero: string;
+    Precio: number;
     UbicacionEspecifica : string;
     Estatus : boolean;
     FechaRegistro: string;

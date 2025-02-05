@@ -30,6 +30,16 @@ const CriptaForm: React.FC<CriptaFormProps> = ({ cripta, setCripta, onSave }) =>
         sx={{ marginBottom: 2 }}
       />
       <TextField
+        label="Precio de Cripta"
+        name="Precio"
+        type="number"
+        value={cripta.Precio}
+        onChange={handleChange}
+        fullWidth
+        required
+        sx={{ marginBottom: 2 }}
+      />
+      <TextField
         label="Ubicación Específica"
         name="UbicacionEspecifica"
         value={cripta.UbicacionEspecifica}
