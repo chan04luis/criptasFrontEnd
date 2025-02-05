@@ -205,7 +205,7 @@ const Admin = () => {
           }}
         >
           <Routes>
-            <Route path="seguridad/usuarios" element={<ViewUsers />} />
+            <Route path="seguridad/usuarios" element={<ViewUsers parentConfig={result?.Configuracion} />} />
             <Route
               path="clientes"
               element={
