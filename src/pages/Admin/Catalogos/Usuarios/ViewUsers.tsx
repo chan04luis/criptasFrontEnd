@@ -7,8 +7,13 @@ import { User, UserCreatePayload } from "../../../../entities/User";
 import CreateUser from "./CreateUser";
 import UserService from "../../../../services/UserService";
 import ConfirmModal from "../../../Utils/ConfirmModal";
+import { Configuracion } from "../../../../entities/Seguridad/Configuracion";
 
-const ViewUsers = () => {
+interface ViewUsersProps {
+  parentConfig: Configuracion | undefined;
+}
+
+const ViewUsers : React.FC<ViewUsersProps> = ({ parentConfig }) => {
   const [currentUser, setCurrentUser] = useState<User  | UserCreatePayload >({
     Id:"",
     Nombres: "",
@@ -142,12 +147,7 @@ const ViewUsers = () => {
         titleModal="Usuario"
         user={currentUser}
         setUser={setCurrentUser}
-        configuracion={{
-          colorPrimary: "#1976d2",
-          contrastePrimary: "#fff",
-          colorSecundario: "#0d47a1",
-          contrasteSecondario: "#fff",
-        }}
+        configuracion={parentConfig}
         filtrosIniciales={initialFilters}
         fetchData={fetchUsers}
         insertData={handleCreateUser}

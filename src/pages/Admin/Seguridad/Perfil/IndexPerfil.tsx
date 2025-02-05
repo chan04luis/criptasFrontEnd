@@ -133,8 +133,8 @@ const IndexPerfil: React.FC<IndexPerfilProps> = ({ parentConfig }) => {
 
   return (
     <Box display="flex" sx={{ height: "100%", width: "100%" }}>
-      <Box sx={{ flex: 1, overflowY: "auto", padding: 2 }}>
-        <MasterLayout titlePage="Perfiles del sistema" buttonActions={renderActions}>
+      <Box sx={{ flex: 1, overflowY: "auto" }}>
+        <MasterLayout titlePage="Perfiles del sistema" config={parentConfig} buttonActions={renderActions}>
           <Box p={2}>
             {loading ? (
               <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>

@@ -12,13 +12,8 @@ import AddIcon from "@mui/icons-material/Add";
 import GenericFormModal from "./GenericFormModal"; // Modal genérico para formularios
 import { User, UserCreatePayload } from "../../entities/User";
 import CustomIconButton from './CustomIconButton';
+import { Configuracion } from "../../entities/Seguridad/Configuracion";
 
-interface ConfiguracionProps {
-  colorPrimary: string;
-  contrastePrimary: string;
-  colorSecundario: string;
-  contrasteSecondario: string;
-}
 
 interface PaginatedResponse<T> {
   totalRegistros: number;
@@ -31,7 +26,7 @@ interface GenericIndexProps<T, F> {
   titleModal: string;
   user: User  | UserCreatePayload;
   setUser: (user: UserCreatePayload | User) => void;
-  configuracion: ConfiguracionProps;
+  configuracion: Configuracion | undefined;
   filtrosIniciales: F;
   fetchData: (filtros: F) => Promise<PaginatedResponse<T> | null>;
   insertData: (onSave:() => void) => Promise<void>;
@@ -167,12 +162,12 @@ const GenericIndex = <T, F>({
     <Box sx={{ backgroundColor: "#f2f2f2", minHeight: "90vh",  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", }}>
       <AppBar
         position="static"
-        sx={{ backgroundColor: configuracion.colorSecundario }}
+        sx={{ backgroundColor: configuracion?.ColorSecundario ?? "#f2f2f2" }}
       >
         <Toolbar>
           <Typography
             variant="h6"
-            sx={{ flexGrow: 1, color: configuracion.contrasteSecondario }}
+            sx={{ flexGrow: 1, color: configuracion?.ContrasteSecundario ?? "#ffffff" }}
           >
             {title}
           </Typography>

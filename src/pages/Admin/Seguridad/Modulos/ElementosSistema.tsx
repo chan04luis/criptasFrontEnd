@@ -347,8 +347,8 @@ const ElementosSistema: React.FC<ElementosSistemaProps> = ({
 
   return (
     <Box display="flex" sx={{height: "100%", width: "100%"}}>
-      <Box sx={{ flex: 1, overflowY: "auto", padding: 2 }}>
-        <MasterLayout titlePage="Elementos del sistema" buttonActions={renderActions}>
+      <Box sx={{ flex: 1, overflowY: "auto" }}>
+        <MasterLayout titlePage="Elementos del sistema" config={parentConfig} buttonActions={renderActions}>
           <Box p={2}>
 
             {loading && (
