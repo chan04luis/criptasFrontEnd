@@ -222,7 +222,7 @@ const Admin = () => {
 
             <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
             
-            <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil />} />
+            <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil config={result?.Configuracion} />} />
           </Routes>
           <ToastContainer position="top-right" autoClose={5000} />
         </Box>

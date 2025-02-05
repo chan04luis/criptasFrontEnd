@@ -6,7 +6,7 @@ interface MasterLayoutProps {
   titlePage: string;
   buttonActions?: ReactNode; // Botones o acciones para la cabecera
   children: ReactNode; // Contenido principal
-  config: Configuracion | undefined
+  config: Configuracion | undefined;
 }
 
 const MasterLayout: React.FC<MasterLayoutProps> = ({
