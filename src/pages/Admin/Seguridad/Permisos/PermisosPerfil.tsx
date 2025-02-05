@@ -24,8 +24,14 @@ import { PermisoPagina } from "../../../../entities/Seguridad/Permisos/PermisoPa
 import { PermisoBoton } from "../../../../entities/Seguridad/Permisos/PermisoBoton";
 import MasterLayout from "../../Seguridad/Modulos/MasterLayout";
 import CustomIconButton from "../../../Utils/CustomIconButton";
+import { Configuracion } from "../../../../entities/Seguridad/Configuracion";
 
-const PermisosPerfil: React.FC = () => {
+interface PermisosPerfilProps {
+  config: Configuracion | undefined;
+}
+
+
+const PermisosPerfil: React.FC<PermisosPerfilProps> = ({config}) => {
   const { idPerfil } = useParams<{ idPerfil: string }>();
   const navigate = useNavigate();
 
@@ -202,7 +208,7 @@ const PermisosPerfil: React.FC = () => {
   );
 
   return (
-    <MasterLayout titlePage="Permisos del Perfil" buttonActions={renderActions}>
+    <MasterLayout titlePage="Permisos del Perfil" config={config} buttonActions={renderActions}>
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
           <CircularProgress />
