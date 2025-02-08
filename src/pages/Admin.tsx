@@ -233,7 +233,7 @@ const Admin = () => {
 
             <Route path="catalogos/secciones/:id" element={<IndexSecciones parentConfig={result?.Configuracion} />} />
           </Routes>
-          <ToastContainer position="top-right" autoClose={5000} />
+          <ToastContainer position="top-right" autoClose={2000} />
         </Box>
     </Box>
   );
