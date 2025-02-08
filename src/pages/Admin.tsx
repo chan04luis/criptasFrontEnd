@@ -224,7 +224,7 @@ const Admin = () => {
             
             <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil config={result?.Configuracion} />} />
           </Routes>
-          <ToastContainer position="top-right" autoClose={5000} />
+          <ToastContainer position="top-right" autoClose={2000} />
         </Box>
     </Box>
   );
