@@ -45,11 +45,14 @@ const GenericFilterForm = <T,>({
   };
 
   const clearFilters = () => {
-    const clearedFilters = fields.reduce((acc, field) => {
+    fields.reduce((acc, field) => {
       acc[field.name] = field.type === "autocomplete" ? ("" as T[keyof T]) : (null as T[keyof T]);
+      setFilters((prev) => ({
+        ...prev,
+        [field.name]: field.type === "autocomplete" ? ("" as T[keyof T]) : (null as T[keyof T])
+      }));
       return acc;
     }, {} as T);
-    setFilters(clearedFilters);
   };
 
   return (

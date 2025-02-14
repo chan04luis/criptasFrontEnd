@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Modal,
-  Box,
-  Typography,
-  Button,
-} from "@mui/material";
+import { Modal, Box, Typography, Button } from "@mui/material";
 
 interface GenericFormModalProps {
   open: boolean;
@@ -31,16 +26,29 @@ const GenericFormModal: React.FC<GenericFormModalProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: 500,
+          maxWidth: "90%",
           bgcolor: "background.paper",
           boxShadow: 24,
-          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          p: 2,
         }}
       >
         <Typography variant="h6" sx={{ marginBottom: 2, textAlign: "center" }}>
           {title}
         </Typography>
-        {children}
+
+        <Box
+          sx={{
+            maxHeight: "60vh",
+            overflowY: "auto",
+            paddingRight: 1,
+          }}
+        >
+          {children}
+        </Box>
+
         <Box
           sx={{
             display: "flex",
@@ -52,7 +60,7 @@ const GenericFormModal: React.FC<GenericFormModalProps> = ({
             Cancelar
           </Button>
           <Button onClick={onSubmit} disabled={isLoading} variant="contained" color="primary">
-            { isLoading ? 'Guardando..' : 'Guardar'}
+            {isLoading ? 'Guardando...' : 'Guardar'}
           </Button>
         </Box>
       </Box>

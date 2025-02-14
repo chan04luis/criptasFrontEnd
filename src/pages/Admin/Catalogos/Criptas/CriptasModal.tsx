@@ -50,6 +50,7 @@ const CriptasModal: React.FC<CriptasModalProps> = ({ idSeccion }) => {
         IdSeccion: idSeccion,
         IdCliente: '2c8e4ed9-d81c-4d0c-a30f-1a8e96e73fc6',
         Numero: "",
+        Disponible: true,
         Precio: 0.0,
         UbicacionEspecifica: "",
         Estatus: true,
@@ -94,20 +95,22 @@ const CriptasModal: React.FC<CriptasModalProps> = ({ idSeccion }) => {
         width: "100%",
         backgroundColor: "#fff",
         minHeight: "50vh",
+        maxHeight: "80vh", // Ajusta según sea necesario
         borderRadius: 2,
         textAlign: "center",
+        overflowY: "auto", // Habilita el scroll vertical
       }}
     >
 
       <Grid container spacing={2} justifyContent="center">
         {criptas.map((cripta) => (
           <Grid item key={cripta.Id} xs={4} sm={3} md={3}>
-            <Tooltip title={cripta.UbicacionEspecifica + ' - ' + formatPrice(cripta.Precio)}>
+            <Tooltip title={!cripta.Disponible ? "Comprado" : (cripta.Estatus ? (`Disponible - ${formatPrice(cripta.Precio)}: ${cripta.UbicacionEspecifica}`) : "Apartado")}>
               <Box
                 sx={{
                   width: "100%",
                   height: "80px",
-                  backgroundColor: cripta.Estatus ? "green" : "red",
+                  backgroundColor: !cripta.Disponible ? "gray" : (cripta.Estatus ? "green" : "red"),
                   color: "#fff",
                   display: "flex",
                   alignItems: "center",

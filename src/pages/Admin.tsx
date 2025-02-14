@@ -21,7 +21,7 @@ import {
   Menu as MenuIcon,
 } from "@mui/icons-material";
 import { Routes, Route, Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext"; 
+import { useAuth } from "../contexts/AuthContext";
 import ViewUsers from "./Admin/Catalogos/Usuarios/ViewUsers";
 import { ToastContainer } from 'react-toastify';
 import ViewConfigs from "./Admin/Seguridad/Configuraciones/ViewConfigs";
@@ -34,12 +34,17 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import IndexIglesias from "./Admin/Catalogos/Iglesias/IndexIglesias";
 import IndexZonas from "./Admin/Catalogos/Zonas/IndexZonas";
 import IndexSecciones from "./Admin/Catalogos/Secciones/IndexSecciones";
+import IndexClientes from "./Admin/Catalogos/Clientes/IndexClientes";
+import IndexPagos from "./Admin/Administracion/Pagos/IndexPagos";
+import MisCriptasPage from "./Admin/Catalogos/Clientes/MisCriptas";
+import IndexTipoDeMantenimiento from "./Admin/Catalogos/TiposMantenimiento/IndexTipoDeMantenimiento";
+import IndexServicios from "./Admin/Catalogos/Servicios/IndexServicios";
 
 const AdminDrawer = ({
   result,
   currentTime,
   logout,
-}: any) =>{
+}: any) => {
   window.document.title = result?.Configuracion.TituloNavegador;
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
   const toggleSection = (section: string) => {
@@ -95,7 +100,7 @@ const AdminDrawer = ({
                         <ListItemButton
                           key={pageKey}
                           component={Link}
-                          to={'/admin'+path}
+                          to={'/admin' + path}
                           sx={{ pl: 4 }}
                         >
                           <ListItemText primary={pageName} />
@@ -126,7 +131,7 @@ const Admin = () => {
   const [currentTime, setCurrentTime] = useState("");
   const [catalogoOpen, setCatalogoOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 600px)");
-  
+
   useEffect(() => {
     const updateCurrentTime = () => {
       const now = new Date();
@@ -181,7 +186,7 @@ const Admin = () => {
           "& .MuiDrawer-paper": {
             width: 240,
             boxSizing: "border-box",
-            bgcolor:  result?.Configuracion.ColorPrimario,
+            bgcolor: result?.Configuracion.ColorPrimario,
             color: result?.Configuracion.ContrastePrimario,
             marginTop: isMobile ? "54px" : "64px",
             transform: !drawerOpen ? "translateX(0)" : "translateX(-240px)",
@@ -196,45 +201,55 @@ const Admin = () => {
           logout={logout}
         />
       </Drawer>
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            backgroundColor: "#f2f2f2",
-            p: 0,
-            marginLeft: isMobile ? 0 : drawerOpen ? 0 : "240px",
-            marginTop: "64px",
-            overflow: "auto",
-          }}
-        >
-          <Routes>
-            <Route path="seguridad/usuarios" element={<ViewUsers parentConfig={result?.Configuracion} />} />
-            <Route
-              path="clientes"
-              element={
-                <div>
-                  <Typography variant="h5">Catálogo de Clientes</Typography>
-                </div>
-              }
-            />
-            <Route path="seguridad/config-general" element={<ViewConfigs parentConfig={result?.Configuracion} />} />
-            
-            <Route path="seguridad/elementos-sistema" element={<ElementosSistema parentConfig={result?.Configuracion} />} />
-            
-            <Route path="seguridad/cambio_contra" element={<ChangePass parentConfig={result?.Configuracion} user={result?.Usuario} />} />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          backgroundColor: "#f2f2f2",
+          p: 0,
+          marginLeft: isMobile ? 0 : drawerOpen ? 0 : "240px",
+          marginTop: "64px",
+          overflow: "auto",
+        }}
+      >
+        <Routes>
+          <Route path="seguridad/usuarios" element={<ViewUsers parentConfig={result?.Configuracion} />} />
+          <Route
+            path="clientes"
+            element={
+              <div>
+                <Typography variant="h5">Catálogo de Clientes</Typography>
+              </div>
+            }
+          />
+          <Route path="seguridad/config-general" element={<ViewConfigs parentConfig={result?.Configuracion} />} />
 
-            <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
-            
-            <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil config={result?.Configuracion} />} />
+          <Route path="seguridad/elementos-sistema" element={<ElementosSistema parentConfig={result?.Configuracion} />} />
 
-            <Route path="catalogos/iglesias" element={<IndexIglesias parentConfig={result?.Configuracion} />} />
+          <Route path="seguridad/cambio_contra" element={<ChangePass parentConfig={result?.Configuracion} user={result?.Usuario} />} />
 
-            <Route path="catalogos/zonas/:id" element={<IndexZonas parentConfig={result?.Configuracion} />} />
+          <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
 
-            <Route path="catalogos/secciones/:id" element={<IndexSecciones parentConfig={result?.Configuracion} />} />
-          </Routes>
-          <ToastContainer position="top-right" autoClose={2000} />
-        </Box>
+          <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil config={result?.Configuracion} />} />
+
+          <Route path="catalogos/iglesias" element={<IndexIglesias parentConfig={result?.Configuracion} />} />
+
+          <Route path="catalogos/zonas/:id" element={<IndexZonas parentConfig={result?.Configuracion} />} />
+
+          <Route path="catalogos/secciones/:id" element={<IndexSecciones parentConfig={result?.Configuracion} />} />
+
+          <Route path="catalogos/clientes" element={<IndexClientes parentConfig={result?.Configuracion} />} />
+
+          <Route path="admin/venta_criptas" element={<IndexPagos parentConfig={result?.Configuracion} />} />
+
+          <Route path="catalogos/miscriptas/:uIdCliente" element={<MisCriptasPage parentConfig={result?.Configuracion} />} />
+
+          <Route path="catalogos/tipos-mantenimiento" element={<IndexTipoDeMantenimiento parentConfig={result?.Configuracion} />} />
+
+          <Route path="catalogos/servicios" element={<IndexServicios parentConfig={result?.Configuracion} />} />
+        </Routes>
+        <ToastContainer position="top-right" autoClose={2000} />
+      </Box>
     </Box>
   );
 };

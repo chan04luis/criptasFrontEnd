@@ -55,12 +55,12 @@ const IndexSecciones: React.FC<IndexSeccionesProps> = ({ parentConfig }) => {
   const handleGoBack = () => {
     navigate(-1);
   };
-  
+
   const handleCloseCriptasModal = () => {
     setOpenCriptasModal(false);
     setSelectedSeccion(null);
   };
-  
+
   const fetchSecciones = async () => {
     setLoading(true);
     try {
@@ -164,18 +164,18 @@ const IndexSecciones: React.FC<IndexSeccionesProps> = ({ parentConfig }) => {
           <Typography variant="h6" sx={{ flexGrow: 1, color: parentConfig?.ContrasteSecundario || "#ffffff" }}>
             Secciones de la Zona
           </Typography>
-            <Box sx={{ display: "flex", gap: 1 }}>
+          <Box sx={{ display: "flex", gap: 1 }}>
             <CustomIconButton onClick={handleGoBack} title="Regresar">
-                <ArrowBackIcon />
+              <ArrowBackIcon />
             </CustomIconButton>
             <CustomIconButton onClick={() => handleOpenModal(null)} title="Agregar">
-                <AddIcon />
+              <AddIcon />
             </CustomIconButton>
             <CustomIconButton onClick={fetchSecciones} title="Refrescar">
-                <RefreshIcon />
+              <RefreshIcon />
             </CustomIconButton>
-            </Box>
-            
+          </Box>
+
         </Toolbar>
       </AppBar>
 
@@ -214,11 +214,11 @@ const IndexSecciones: React.FC<IndexSeccionesProps> = ({ parentConfig }) => {
                       <DeleteForeverIcon />
                     </IconButton>
                     <IconButton
-                        onClick={() => handleOpenCriptasModal(seccion)}
-                        title="Gestión de criptas"
-                        >
-                        <AdminPanelSettingsIcon />
-                        </IconButton>
+                      onClick={() => handleOpenCriptasModal(seccion)}
+                      title="Gestión de criptas"
+                    >
+                      <AdminPanelSettingsIcon />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -231,17 +231,17 @@ const IndexSecciones: React.FC<IndexSeccionesProps> = ({ parentConfig }) => {
         <SeccionForm setSeccion={setSelectedSeccion} seccion={selectedSeccion!} onSave={handleSaveSeccion} />
       </GenericFormModal>
 
-      <GenericFormModal 
-        open={openCriptasModal} 
+      <GenericFormModal
+        open={openCriptasModal}
         onSubmit={handleCloseCriptasModal}
         title={`Criptas de la Sección: ${selectedSeccion?.Nombre}`}
-        onClose={handleCloseCriptasModal} 
+        onClose={handleCloseCriptasModal}
         isLoading={false}
-        >
+      >
         {selectedSeccion && (
-            <CriptasModal idSeccion={selectedSeccion.Id} parentConfig={parentConfig} />
+          <CriptasModal idSeccion={selectedSeccion.Id} parentConfig={parentConfig} />
         )}
-        </GenericFormModal>
+      </GenericFormModal>
 
       <ConfirmModal open={openConfirmModal} onClose={() => setOpenConfirmModal(false)} onConfirm={handleDeleteConfirm} title="Confirmar eliminación" message="¿Estás seguro de que deseas eliminar esta sección?" />
     </Box>
