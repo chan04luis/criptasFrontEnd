@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { EntFallecidosUpdateRequest } from "../../../../entities/catalogos/fallecidos/EntFallecidosUpdateRequest";
 
 interface UpdateFallecidoProps {
@@ -18,10 +18,8 @@ const UpdateFallecido: React.FC<UpdateFallecidoProps> = ({ fallecido, setFalleci
         <Box component="form" onSubmit={(e) => { e.preventDefault(); onSave(); }} sx={{ padding: 2 }}>
             <TextField label="Nombre" name="Nombre" value={fallecido.Nombre} onChange={handleChange} fullWidth required />
             <TextField label="Apellidos" name="Apellidos" value={fallecido.Apellidos} onChange={handleChange} fullWidth required sx={{ marginTop: 2 }} />
-            <TextField label="Fecha Nacimiento" name="Nacimiento" type="date" value={fallecido.Nacimiento} onChange={handleChange} fullWidth required sx={{ marginTop: 2 }} />
-            <TextField label="Fecha Fallecimiento" name="Fallecimiento" type="date" value={fallecido.Fallecimiento} onChange={handleChange} fullWidth required sx={{ marginTop: 2 }} />
-
-            <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>Actualizar</Button>
+            <TextField label="Fecha Nacimiento" name="Nacimiento" type="date" value={fallecido.Nacimiento ? fallecido.Nacimiento.split("T")[0] : ""} onChange={handleChange} fullWidth required sx={{ marginTop: 2 }} />
+            <TextField label="Fecha Fallecimiento" name="Fallecimiento" type="date" value={fallecido.Fallecimiento ? fallecido.Fallecimiento.split("T")[0] : ""} onChange={handleChange} fullWidth required sx={{ marginTop: 2 }} />
         </Box>
     );
 };

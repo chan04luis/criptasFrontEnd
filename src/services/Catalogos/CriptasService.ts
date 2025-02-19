@@ -4,6 +4,7 @@ import { ApiResponse } from "../../entities/ApiResponse";
 import { GenericService } from "../GenericService";
 import { Criptas } from "../../entities/catalogos/criptas/Criptas";
 import { EntServicios } from "../../entities/catalogos/servicios/EntServicios";
+import { Visita } from "../../entities/catalogos/fallecidos/visita";
 
 const getToken = () => localStorage.getItem("authToken");
 const headers = {
@@ -20,6 +21,15 @@ export class CriptasService {
       return this.handleError(error);
     }
   }
+  static async getByIdMovil(id: string): Promise<ApiResponse<EntServicios>> {
+    try {
+      const response = await axios.get(`${apiUrl}/Movil/servicio/${id}`);
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
   static async deleteServicios(id: string): Promise<ApiResponse<boolean>> {
     try {
       const response = await axios.delete(`${apiUrl}/servicios/${id}`, { headers });
@@ -69,6 +79,15 @@ export class CriptasService {
   static async updateEstatusCripta(payload: Criptas): Promise<ApiResponse<boolean>> {
     try {
       const response = await axios.put(`${apiUrl}/criptas/UpdateStatus`, payload, { headers });
+      return response.data;
+    } catch (error) {
+      return this.handleError(error);
+    }
+  }
+
+  static async createVisita(payload: Visita): Promise<ApiResponse<Visita>> {
+    try {
+      const response = await axios.post(`${apiUrl}/Criptas/Visitas/Create`, payload, { headers });
       return response.data;
     } catch (error) {
       return this.handleError(error);

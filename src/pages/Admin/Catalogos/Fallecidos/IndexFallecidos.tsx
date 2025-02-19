@@ -29,6 +29,8 @@ import { EntFallecidosRequest } from "../../../../entities/catalogos/fallecidos/
 import { EntFallecidosUpdateRequest } from "../../../../entities/catalogos/fallecidos/EntFallecidosUpdateRequest";
 import FallecidosService from "../../../../services/Catalogos/FallecidosService";
 import CustomIconButton from "../../../Utils/CustomIconButton";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
+import UpdateDocs from "./UpdateDocs";
 
 interface IndexFallecidosProps {
     parentConfig: Configuracion | undefined;
@@ -37,9 +39,11 @@ interface IndexFallecidosProps {
 
 const IndexFallecidos: React.FC<IndexFallecidosProps> = ({ parentConfig, uIdCripta }) => {
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingDocs, setLoadingDocs] = useState<boolean>(false);
     const [fallecidos, setFallecidos] = useState<EntFallecidos[]>([]);
     const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
     const [openUpdateModal, setOpenUpdateModal] = useState<boolean>(false);
+    const [openUpdateDocsModal, setOpenUpdateDocsModal] = useState<boolean>(false);
     const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
     const [selectedFallecido, setSelectedFallecido] = useState<EntFallecidos | null>(null);
     const [newFallecido, setNewFallecido] = useState<EntFallecidosRequest>({
@@ -84,9 +88,15 @@ const IndexFallecidos: React.FC<IndexFallecidosProps> = ({ parentConfig, uIdCrip
         setOpenUpdateModal(true);
     };
 
+    const handleOpenUpdateDocsModal = (fallecido: EntFallecidos) => {
+        setSelectedFallecido(fallecido);
+        setOpenUpdateDocsModal(true);
+    };
+
     const handleCloseModals = () => {
         setOpenCreateModal(false);
         setOpenUpdateModal(false);
+        setOpenUpdateDocsModal(false);
         setSelectedFallecido(null);
     };
 
@@ -116,6 +126,19 @@ const IndexFallecidos: React.FC<IndexFallecidosProps> = ({ parentConfig, uIdCrip
         }
         handleCloseModals();
         fetchFallecidos();
+    };
+
+    const handleSaveDocsFallecido = async () => {
+        if (!selectedFallecido) return;
+        setLoadingDocs(true);
+        const result = await FallecidosService.updateDocs(selectedFallecido);
+        if (result.HasError) {
+            toast.error(result.Message || "Error al actualizar.");
+        } else {
+            toast.success("Actualizado con éxito.");
+        }
+        setLoadingDocs(false);
+        handleCloseModals();
     };
 
     const handleDeleteConfirm = async () => {
@@ -193,6 +216,9 @@ const IndexFallecidos: React.FC<IndexFallecidosProps> = ({ parentConfig, uIdCrip
                                             <IconButton onClick={() => handleOpenUpdateModal(fallecido)} title="Editar">
                                                 <EditIcon />
                                             </IconButton>
+                                            <IconButton onClick={() => handleOpenUpdateDocsModal(fallecido)} title="Documentos">
+                                                <FolderOpenIcon />
+                                            </IconButton>
                                             <IconButton onClick={() => handleDeleteFallecido(fallecido.Id)} title="Eliminar" sx={{ color: "red" }}>
                                                 <DeleteForeverIcon />
                                             </IconButton>
@@ -220,6 +246,19 @@ const IndexFallecidos: React.FC<IndexFallecidosProps> = ({ parentConfig, uIdCrip
                         FechaActualizacion: new Date().toISOString()
                     }))}
                     onSave={handleSaveFallecido}
+                />
+            </GenericFormModal>
+
+            <GenericFormModal open={openUpdateDocsModal} title="Actualizar Documentos" onClose={handleCloseModals} onSubmit={handleSaveDocsFallecido} isLoading={loading}>
+                <UpdateDocs
+                    loading={loadingDocs}
+                    setLoading={setLoadingDocs}
+                    fallecido={selectedFallecido!}
+                    setFallecido={(data) => setSelectedFallecido((prev) => ({
+                        ...(prev as EntFallecidos),
+                        ...data
+                    }))}
+                    onSave={handleSaveDocsFallecido}
                 />
             </GenericFormModal>
 

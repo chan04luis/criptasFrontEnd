@@ -130,6 +130,7 @@ const MisCriptasPage: React.FC<MisCriptasProps> = ({ parentConfig }) => {
                                     <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Iglesia</TableCell>
                                     <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Fallecidos</TableCell>
                                     <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Beneficiarios</TableCell>
+                                    <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Visitas</TableCell>
                                     <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Fecha Compra</TableCell>
                                     <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Acciones</TableCell>
                                 </TableRow>
@@ -143,6 +144,7 @@ const MisCriptasPage: React.FC<MisCriptasProps> = ({ parentConfig }) => {
                                         <TableCell>{cripta.Iglesia}</TableCell>
                                         <TableCell>{cripta.Fallecidos}</TableCell>
                                         <TableCell>{cripta.Beneficiarios}</TableCell>
+                                        <TableCell>{cripta.Visitas}</TableCell>
                                         <TableCell>{new Date(cripta.FechaCompra).toLocaleDateString()}</TableCell>
                                         <TableCell>
                                             <IconButton title="Ver Fallecidos" sx={{ color: "darkred" }} onClick={() => handleOpenFallecidosModal(cripta.Id)}>

@@ -1,5 +1,8 @@
 export interface EntFallecidosSearchRequest {
     Nombre?: string;
     Apellidos?: string;
-    Estatus?: boolean;
+    IdIglesia?: string;
+    Estatus: boolean | null;
+    NumPag: number;
+    NumReg: number;
 }

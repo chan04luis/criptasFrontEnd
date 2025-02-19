@@ -39,6 +39,7 @@ import IndexPagos from "./Admin/Administracion/Pagos/IndexPagos";
 import MisCriptasPage from "./Admin/Catalogos/Clientes/MisCriptas";
 import IndexTipoDeMantenimiento from "./Admin/Catalogos/TiposMantenimiento/IndexTipoDeMantenimiento";
 import IndexServicios from "./Admin/Catalogos/Servicios/IndexServicios";
+import FallecidosBusquedaPage from "./Admin/Catalogos/Fallecidos/FallecidosBusqueda";
 
 const AdminDrawer = ({
   result,
@@ -247,6 +248,8 @@ const Admin = () => {
           <Route path="catalogos/tipos-mantenimiento" element={<IndexTipoDeMantenimiento parentConfig={result?.Configuracion} />} />
 
           <Route path="catalogos/servicios" element={<IndexServicios parentConfig={result?.Configuracion} />} />
+
+          <Route path="admin/busqueda" element={<FallecidosBusquedaPage parentConfig={result?.Configuracion} />} />
         </Routes>
         <ToastContainer position="top-right" autoClose={2000} />
       </Box>

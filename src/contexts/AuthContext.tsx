@@ -8,7 +8,7 @@ interface AuthContextType {
   user: Usuario | null;
   setUser: (user: Usuario | null) => void;
   logout: () => void;
-  result : RootObject | null;
+  result: RootObject | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -25,26 +25,30 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const getToken = () => localStorage.getItem("authToken");
   useEffect(() => {
     const fetchUserData = async () => {
+      const currentPath = window.location.pathname;
+      if (currentPath.startsWith("/servicio")) {
+        return;
+      }
       const token = getToken();
       if (!token) {
-        return; 
-      }else if(token == undefined || token == "undefined"){
+        return;
+      } else if (token == undefined || token == "undefined") {
         localStorage.removeItem("authToken");
         localStorage.removeItem("authId");
-        window.location.href = "/login"; 
+        window.location.href = "/login";
       }
       try {
         const response = await AutenticationService.get();
-        if(response != null && response != undefined && response.Result != null && response.Result != undefined){
-          const result : RootObject = response.Result;
+        if (response != null && response != undefined && response.Result != null && response.Result != undefined) {
+          const result: RootObject = response.Result;
           setUser(result.Usuario);
           setResult(result);
           localStorage.setItem('authToken', result.Token);
           localStorage.setItem('authResult', JSON.stringify(result));
-        }else{
+        } else {
           localStorage.removeItem("authToken");
           localStorage.removeItem("authId");
-          window.location.href = "/login"; 
+          window.location.href = "/login";
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -57,8 +61,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Función para cerrar sesión
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("authToken"); 
-    localStorage.removeItem("authId"); 
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("authId");
     window.location.href = "/login";
   };
 

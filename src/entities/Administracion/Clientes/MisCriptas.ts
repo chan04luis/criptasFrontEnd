@@ -8,5 +8,6 @@ export interface MisCriptas {
     Long: string;
     Fallecidos: number;
     Beneficiarios: number;
+    Visitas: number;
     FechaCompra: string;
 }

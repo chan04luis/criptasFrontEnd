@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Box, TextField } from "@mui/material";
+import { Autocomplete, Box, TextField } from "@mui/material";
 import UploadImage from "../../../Utils/UploadImage";
 import "react-quill/dist/quill.snow.css";
 import { EntServicios } from "../../../../entities/catalogos/servicios/EntServicios";
+import { Iglesia } from "../../../../entities/catalogos/iglesias/Iglesia";
 
 let ReactQuill: any = null; // Se inicializa null para evitar SSR issues en Vite
 
@@ -16,12 +17,16 @@ interface CreateOrUpdateServicioProps {
     servicio: EntServicios;
     setServicio: (servicio: EntServicios) => void;
     onSave: () => void;
+    iglesias: Iglesia[];
+    loading: boolean;
 }
 
 const CreateOrUpdateServicio: React.FC<CreateOrUpdateServicioProps> = ({
     servicio,
     setServicio,
     onSave,
+    iglesias,
+    loading
 }) => {
     const [mounted, setMounted] = useState(false);
 
@@ -42,6 +47,16 @@ const CreateOrUpdateServicio: React.FC<CreateOrUpdateServicioProps> = ({
                 onChange={handleChange}
                 fullWidth
                 required
+            />
+
+            <Autocomplete
+                sx={{ mt: 2 }}
+                options={iglesias}
+                getOptionLabel={(option) => option.Nombre || ""}
+                value={iglesias.find((ig) => ig.Id === servicio.IdIglesia) || null}
+                onChange={(_, newValue) => setServicio({ ...servicio, IdIglesia: newValue?.Id || "" })}
+                loading={loading}
+                renderInput={(params) => <TextField {...params} label="Seleccionar Iglesia" fullWidth />}
             />
 
             <UploadImage

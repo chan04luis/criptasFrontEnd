@@ -27,6 +27,8 @@ import { EntServicios } from "../../../../entities/catalogos/servicios/EntServic
 import CriptasService from "../../../../services/Catalogos/CriptasService";
 import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
+import { Iglesia } from "../../../../entities/catalogos/iglesias/Iglesia";
+import IglesiaService from "../../../../services/Catalogos/IglesiaService";
 
 interface IndexServiciosProps {
     parentConfig: Configuracion | undefined;
@@ -39,6 +41,9 @@ const IndexServicios: React.FC<IndexServiciosProps> = ({ parentConfig }) => {
     const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
     const [selectedServicio, setSelectedServicio] = useState<EntServicios | null>(null);
     const [handleDelete, setHandleDelete] = useState<(() => Promise<void>) | null>(null);
+
+    const [iglesias, setIglesias] = useState<Iglesia[]>([]);
+    const [loadingI, setLoadingI] = useState<boolean>(true);
 
     const fetchServicios = async () => {
         setLoading(true);
@@ -69,6 +74,7 @@ const IndexServicios: React.FC<IndexServiciosProps> = ({ parentConfig }) => {
                     Id: "",
                     Nombre: "",
                     Descripcion: "",
+                    IdIglesia: "",
                     Estatus: true,
                     Img: "",
                     FechaRegistro: new Date().toISOString(),
@@ -134,7 +140,25 @@ const IndexServicios: React.FC<IndexServiciosProps> = ({ parentConfig }) => {
         setOpenConfirmModal(true);
     };
 
+
+    const fetchIglesias = async () => {
+        setLoadingI(true);
+        try {
+            const response = await IglesiaService.getIglesias();
+            if (!response.HasError && response.Result) {
+                setIglesias(response.Result);
+            }
+        } catch (error) {
+            console.error("Error al obtener las iglesias", error);
+        } finally {
+            setLoadingI(false);
+        }
+    };
+
+
+
     useEffect(() => {
+        fetchIglesias();
         fetchServicios();
     }, []);
 
@@ -167,7 +191,7 @@ const IndexServicios: React.FC<IndexServiciosProps> = ({ parentConfig }) => {
                             <TableHead>
                                 <TableRow sx={{ backgroundColor: parentConfig?.ColorPrimario || "#1976d2" }}>
                                     <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Nombre</TableCell>
-                                    <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Descripción</TableCell>
+                                    <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Iglesia</TableCell>
                                     <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Imagen</TableCell>
                                     <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Estatus</TableCell>
                                     <TableCell sx={{ color: parentConfig?.ContrastePrimario || "#ffffff" }}>Acciones</TableCell>
@@ -178,7 +202,7 @@ const IndexServicios: React.FC<IndexServiciosProps> = ({ parentConfig }) => {
                                     <TableRow key={servicio.Id}>
                                         <TableCell>{servicio.Nombre}</TableCell>
                                         <TableCell>
-                                            <div dangerouslySetInnerHTML={{ __html: servicio.Descripcion }} />
+                                            {iglesias.find(x => x.Id == servicio.IdIglesia)?.Nombre}
                                         </TableCell>
 
                                         <TableCell>
@@ -214,7 +238,7 @@ const IndexServicios: React.FC<IndexServiciosProps> = ({ parentConfig }) => {
             </Paper>
 
             <GenericFormModal open={openModal} title="Servicio" onClose={handleCloseModal} onSubmit={handleSaveServicio} isLoading={loading}>
-                <CreateOrUpdateServicio servicio={selectedServicio!} setServicio={setSelectedServicio} onSave={handleSaveServicio} />
+                <CreateOrUpdateServicio iglesias={iglesias} loading={loadingI} servicio={selectedServicio!} setServicio={setSelectedServicio} onSave={handleSaveServicio} />
             </GenericFormModal>
 
             <ConfirmModal open={openConfirmModal} onClose={() => setOpenConfirmModal(false)} onConfirm={handleDeleteConfirm} title="Confirmar eliminación" message="¿Estás seguro de que deseas eliminar este servicio?" />
