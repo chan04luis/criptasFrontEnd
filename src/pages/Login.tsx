@@ -59,7 +59,7 @@ const Login = () => {
   return (
     <div
       style={{
-        background: 'url(/wallpaper_iglesia.jpg) no-repeat center center fixed',
+        background: 'url(/wallpaper_glomadent.jpg) no-repeat center center fixed',
         backgroundSize: "cover",
         height: "100vh",
         width: "100vw",
