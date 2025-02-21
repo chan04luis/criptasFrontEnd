@@ -100,6 +100,9 @@ const Login = () => {
               margin="normal"
               variant="outlined"
               autoComplete="email"
+              slotProps={{
+                inputLabel: { shrink: true },
+              }}
             />
             <TextField
               label="Contraseña"
@@ -111,6 +114,9 @@ const Login = () => {
               margin="normal"
               variant="outlined"
               autoComplete="current-password"
+              slotProps={{
+                inputLabel: { shrink: true },
+              }}
             />
             <Button
               type="submit"
