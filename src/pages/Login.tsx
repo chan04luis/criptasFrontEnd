@@ -8,7 +8,7 @@ import { apiUrl, errorServer } from "../config/globals";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { updateToken } = useAuth(); 
+  const { updateToken } = useAuth();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +34,7 @@ const Login = () => {
       } else {
         const token = response.data.Result.Token;
         if (token) {
-            updateToken(token, response.data.Result);
+          updateToken(token, response.data.Result);
         } else {
           toast.error('No se recibió un token');
         }
@@ -59,13 +59,13 @@ const Login = () => {
   return (
     <div
       style={{
-        background: 'url(/wallpaper_iglesia.jpg) no-repeat center center fixed',
+        background: 'url(/wallpaper_pizzeria.jpg) no-repeat center center fixed',
         backgroundSize: "cover",
         height: "100vh",
         width: "100vw",
         display: "flex",
-        justifyContent: "center", 
-        alignItems: "center", 
+        justifyContent: "center",
+        alignItems: "center",
         position: "absolute",
         top: 0,
         left: 0,
