@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   TextField,
   Typography,
@@ -13,7 +13,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { toast } from 'react-toastify';
-import ConfiguracionService from '../../../../services/Seguridad/ConfiguracionService';
 import { Configuracion } from '../../../../entities/Seguridad/Configuracion';
 import { Usuario } from '../../../../entities/Usuario';
 import { UserChangePassPayload } from '../../../../entities/User';
@@ -24,7 +23,7 @@ interface ChangePassProps {
   user: Usuario | undefined;
 }
 
-const ChangePass: React.FC<ChangePassProps> = ({parentConfig, user}) => {
+const ChangePass: React.FC<ChangePassProps> = ({ parentConfig, user }) => {
   const [contra, setContra] = useState<UserChangePassPayload>({
     Id: user?.IdUsuario,
     Email: user?.Correo,
@@ -63,12 +62,12 @@ const ChangePass: React.FC<ChangePassProps> = ({parentConfig, user}) => {
       if (!response.HasError) {
         toast.success('Contraseña actualizada correctamente');
         setContra({
-            Id: user?.IdUsuario,
-            Email: user?.Correo,
-            Contra: '',
-            NewContra: '',
-            ConfirmNewContra: ''
-          });
+          Id: user?.IdUsuario,
+          Email: user?.Correo,
+          Contra: '',
+          NewContra: '',
+          ConfirmNewContra: ''
+        });
       } else {
         toast.error(response.Message);
       }
@@ -92,34 +91,34 @@ const ChangePass: React.FC<ChangePassProps> = ({parentConfig, user}) => {
         sx={{ backgroundColor: parentConfig?.ColorSecundario || "#000000" }}
       >
         <Toolbar>
-            <Typography
-                variant="h6"
-                sx={{ flexGrow: 1, color: parentConfig?.ContrasteSecundario || "#ffffff" }}
-            >
-                {'Cambiar tu contraseña'}
-            </Typography>
-            <IconButton
-                onClick={handleSave}
-                title="Guardar"
-                sx={{
-                backgroundColor: '#ffffff',
-                color: '#FF9800',
-                borderRadius: '50%',
-                padding: '10px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                '&:hover': { backgroundColor: '#f5f5f5' },
-                }}
-                disabled={loading}
-            >
-                <SaveIcon />
-            </IconButton>
+          <Typography
+            variant="h6"
+            sx={{ flexGrow: 1, color: parentConfig?.ContrasteSecundario || "#ffffff" }}
+          >
+            {'Cambiar tu contraseña'}
+          </Typography>
+          <IconButton
+            onClick={handleSave}
+            title="Guardar"
+            sx={{
+              backgroundColor: '#ffffff',
+              color: '#FF9800',
+              borderRadius: '50%',
+              padding: '10px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              '&:hover': { backgroundColor: '#f5f5f5' },
+            }}
+            disabled={loading}
+          >
+            <SaveIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
 
       <Paper elevation={3} sx={{ padding: 3, marginTop: 2 }}>
         <Box mt={2} display="flex" flexDirection="column" gap={2}>
           {/* Colores */}
-          <Typography variant="subtitle1" sx={{textAlign: "center", fontFamily: "bold", fontSize: "25px"}}>{user?.Nombres} {user?.Apellidos}</Typography>
+          <Typography variant="subtitle1" sx={{ textAlign: "center", fontFamily: "bold", fontSize: "25px" }}>{user?.Nombres} {user?.Apellidos}</Typography>
           <Box display="flex" gap={2}>
             <TextField
               fullWidth
