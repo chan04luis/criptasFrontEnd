@@ -35,6 +35,7 @@ import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import { GiCoffin } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
+import { IdCliente } from "../../../../config/globals";
 
 interface IndexClientesProps {
   parentConfig: Configuracion | undefined;
@@ -65,6 +66,7 @@ const IndexClientes: React.FC<IndexClientesProps> = ({ parentConfig }) => {
     }
   }
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingSave, setLoadingSave] = useState<boolean>(false);
   const [totalReg, setTotalReg] = useState<number>(0);
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -140,6 +142,7 @@ const IndexClientes: React.FC<IndexClientesProps> = ({ parentConfig }) => {
   };
 
   const handleSaveCliente = async () => {
+    setLoadingSave(true);
     if (selectedCliente || (selectedClienteC.Nombres != "" && selectedClienteC.Email != "" && selectedClienteC.Sexo != "")) {
       if (selectedCliente?.Id && selectedClienteU != undefined && selectedClienteU != null) {
         const result = await ClienteService.updateCliente(selectedClienteU);
@@ -147,6 +150,8 @@ const IndexClientes: React.FC<IndexClientesProps> = ({ parentConfig }) => {
           toast.error(result.Message || "Error al actualizar el cliente.");
         } else {
           toast.success("Cliente actualizado con éxito.");
+          handleCloseModal();
+          fetchClientes();
         }
       } else {
         selectedClienteC.FechaNac = formatDate(selectedClienteC.FechaNacD).slice(0, 10);
@@ -155,11 +160,12 @@ const IndexClientes: React.FC<IndexClientesProps> = ({ parentConfig }) => {
           toast.error(result.Message || "Error al crear el cliente.");
         } else {
           toast.success("Cliente creado con éxito.");
+          handleCloseModal();
+          fetchClientes();
         }
       }
     }
-    handleCloseModal();
-    fetchClientes();
+    setLoadingSave(true);
   };
 
   const handleDeleteConfirm = async () => {
@@ -285,19 +291,23 @@ const IndexClientes: React.FC<IndexClientesProps> = ({ parentConfig }) => {
                       </IconButton>
                     </TableCell>
                     <TableCell>
-                      <IconButton onClick={() => handleOpenModal(cliente)} title="Editar">
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton onClick={() => handleDeleteCliente(cliente.Id)} title="Eliminar" sx={{ color: "red" }}>
-                        <DeleteForeverIcon />
-                      </IconButton>
-                      <IconButton
-                        title="Ver criptas"
-                        onClick={() => handleRedirectToMisCriptas(cliente.Id)}
-                        sx={{ color: "darkred" }}
-                      >
-                        <GiCoffin />
-                      </IconButton>
+                      {cliente.Id != IdCliente ? (
+                        <>
+                          <IconButton onClick={() => handleOpenModal(cliente)} title="Editar">
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton onClick={() => handleDeleteCliente(cliente.Id)} title="Eliminar" sx={{ color: "red" }}>
+                            <DeleteForeverIcon />
+                          </IconButton>
+                          <IconButton
+                            title="Ver criptas"
+                            onClick={() => handleRedirectToMisCriptas(cliente.Id)}
+                            sx={{ color: "darkred" }}
+                          >
+                            <GiCoffin />
+                          </IconButton>
+                        </>
+                      ) : <></>}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -333,7 +343,7 @@ const IndexClientes: React.FC<IndexClientesProps> = ({ parentConfig }) => {
         title={selectedCliente ? "Editar Cliente" : "Crear Cliente"}
         onClose={handleCloseModal}
         onSubmit={handleSaveCliente}
-        isLoading={loading}
+        isLoading={loadingSave}
       >
         {selectedCliente ? (
           <UpdateCliente setCliente={setSelectedClienteU} cliente={selectedClienteU} onSave={handleSaveCliente} />
@@ -353,7 +363,7 @@ const IndexClientes: React.FC<IndexClientesProps> = ({ parentConfig }) => {
 
 
       <ConfirmModal open={openConfirmModal} onClose={() => setOpenConfirmModal(false)} onConfirm={handleDeleteConfirm} title="Confirmar eliminación" message="¿Estás seguro de que deseas eliminar este cliente?" />
-    </Box>
+    </Box >
   );
 };
 

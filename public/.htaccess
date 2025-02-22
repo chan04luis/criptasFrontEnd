@@ -1,0 +1,7 @@
+# Activa la reescritura de URLs
+RewriteEngine On
+
+# Redirige todo a index.html, excepto los archivos y directorios existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /index.html [L]
