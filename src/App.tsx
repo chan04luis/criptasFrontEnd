@@ -14,21 +14,21 @@ const App = () => {
     <AuthProvider>
       <Routes>
         {/* Si el usuario tiene un token, se le permite acceder a /admin y /visitas */}
-        <Route path="/admin/*" element={token ? <Admin /> : <Navigate to="/login" />} />
-        <Route path="/visitas" element={token ? <Visitas /> : <Navigate to="/login" />} />
-        
+        <Route path="/admin/*" element={token != null ? <Admin /> : <Navigate to="/login" />} />
+        <Route path="/visitas" element={token != null ? <Visitas /> : <Navigate to="/login" />} />
+
         {/* Si no tiene token, se redirige a /login */}
-        <Route path="/login" element={!token ? <Login /> : <Navigate to="/admin" />} />
-        
+        <Route path="/login" element={token != null ? <Navigate to="/admin" /> : <Login />} />
+
         {/* Rutas para cambiar y recuperar, solo accesibles sin token */}
-        <Route path="/cambiar" element={!token ? <Cambiar /> : <Navigate to="/admin" />} />
-        <Route path="/recuperar" element={!token ? <Recuperar /> : <Navigate to="/admin" />} />
-        
+        <Route path="/cambiar" element={token != null ? <Navigate to="/admin" /> : <Cambiar />} />
+        <Route path="/recuperar" element={token != null ? <Navigate to="/admin" /> : <Recuperar />} />
+
         {/* Ruta raíz */}
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={token != null ? <Navigate to="/admin" /> : <Navigate to="/login" />} />
       </Routes>
     </AuthProvider>
-    
+
   );
 };
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export const useAuth = () => {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem('authToken'));
 
   useEffect(() => {
     const storedToken = localStorage.getItem('authToken');
@@ -10,14 +10,14 @@ export const useAuth = () => {
     }
   }, []);
 
-  const updateToken = (newToken: string, result:any) => {
+  const updateToken = (newToken: string, result: any) => {
     localStorage.setItem('authToken', newToken);
     localStorage.setItem('authResult', JSON.stringify(result));
     setToken(newToken);
     window.location.href = '/admin';
   };
 
-  const refreshToken = (newToken: string, result:any) => {
+  const refreshToken = (newToken: string, result: any) => {
     localStorage.setItem('authToken', newToken);
     localStorage.setItem('authResult', JSON.stringify(result));
   };

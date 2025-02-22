@@ -20,8 +20,8 @@ import {
   Logout,
   Menu as MenuIcon,
 } from "@mui/icons-material";
-import { Routes, Route, Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext"; 
+import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import ViewUsers from "./Admin/Catalogos/Usuarios/ViewUsers";
 import { ToastContainer } from 'react-toastify';
 import ViewConfigs from "./Admin/Seguridad/Configuraciones/ViewConfigs";
@@ -36,7 +36,7 @@ const AdminDrawer = ({
   result,
   currentTime,
   logout,
-}: any) =>{
+}: any) => {
   window.document.title = result?.Configuracion.TituloNavegador;
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
   const toggleSection = (section: string) => {
@@ -92,7 +92,7 @@ const AdminDrawer = ({
                         <ListItemButton
                           key={pageKey}
                           component={Link}
-                          to={'/admin'+path}
+                          to={'/admin' + path}
                           sx={{ pl: 4 }}
                         >
                           <ListItemText primary={pageName} />
@@ -123,7 +123,7 @@ const Admin = () => {
   const [currentTime, setCurrentTime] = useState("");
   const [catalogoOpen, setCatalogoOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 600px)");
-  
+
   useEffect(() => {
     const updateCurrentTime = () => {
       const now = new Date();
@@ -178,7 +178,7 @@ const Admin = () => {
           "& .MuiDrawer-paper": {
             width: 240,
             boxSizing: "border-box",
-            bgcolor:  result?.Configuracion.ColorPrimario,
+            bgcolor: result?.Configuracion.ColorPrimario,
             color: result?.Configuracion.ContrastePrimario,
             marginTop: isMobile ? "54px" : "64px",
             transform: !drawerOpen ? "translateX(0)" : "translateX(-240px)",
@@ -193,39 +193,40 @@ const Admin = () => {
           logout={logout}
         />
       </Drawer>
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            backgroundColor: "#f2f2f2",
-            p: 0,
-            marginLeft: isMobile ? 0 : drawerOpen ? 0 : "240px",
-            marginTop: "64px",
-            overflow: "auto",
-          }}
-        >
-          <Routes>
-            <Route path="seguridad/usuarios" element={<ViewUsers parentConfig={result?.Configuracion} />} />
-            <Route
-              path="clientes"
-              element={
-                <div>
-                  <Typography variant="h5">Catálogo de Clientes</Typography>
-                </div>
-              }
-            />
-            <Route path="seguridad/config-general" element={<ViewConfigs parentConfig={result?.Configuracion} />} />
-            
-            <Route path="seguridad/elementos-sistema" element={<ElementosSistema parentConfig={result?.Configuracion} />} />
-            
-            <Route path="seguridad/cambio_contra" element={<ChangePass parentConfig={result?.Configuracion} user={result?.Usuario} />} />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          backgroundColor: "#f2f2f2",
+          p: 0,
+          marginLeft: isMobile ? 0 : drawerOpen ? 0 : "240px",
+          marginTop: "64px",
+          overflow: "auto",
+        }}
+      >
+        <Routes>
+          <Route path="seguridad/usuarios" element={<ViewUsers parentConfig={result?.Configuracion} />} />
+          <Route
+            path="clientes"
+            element={
+              <div>
+                <Typography variant="h5">Catálogo de Clientes</Typography>
+              </div>
+            }
+          />
+          <Route path="seguridad/config-general" element={<ViewConfigs parentConfig={result?.Configuracion} />} />
 
-            <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
-            
-            <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil config={result?.Configuracion} />} />
-          </Routes>
-          <ToastContainer position="top-right" autoClose={2000} />
-        </Box>
+          <Route path="seguridad/elementos-sistema" element={<ElementosSistema parentConfig={result?.Configuracion} />} />
+
+          <Route path="seguridad/cambio_contra" element={<ChangePass parentConfig={result?.Configuracion} user={result?.Usuario} />} />
+
+          <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
+
+          <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil config={result?.Configuracion} />} />
+        </Routes>
+        <Outlet />
+        <ToastContainer position="top-right" autoClose={2000} />
+      </Box>
     </Box>
   );
 };
