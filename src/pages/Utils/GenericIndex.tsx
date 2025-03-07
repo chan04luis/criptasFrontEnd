@@ -24,13 +24,15 @@ interface PaginatedResponse<T> {
 interface GenericIndexProps<T, F> {
   title: string;
   titleModal: string;
-  user: User  | UserCreatePayload;
+  user: User | UserCreatePayload;
   setUser: (user: UserCreatePayload | User) => void;
   configuracion: Configuracion | undefined;
   filtrosIniciales: F;
   fetchData: (filtros: F) => Promise<PaginatedResponse<T> | null>;
-  insertData: (onSave:() => void) => Promise<void>;
-  updateData: (onSave:() => void) => Promise<void>;
+  insertData: (onSave: () => void) => Promise<void>;
+  updateData: (onSave: () => void) => Promise<void>;
+  onAsiggment: (id: string) => void;
+  onAsiggmentSuc: (id: string) => void;
   deleteData: (id: string) => Promise<void>;
   updateStatus: (id: string, newStatus: string) => Promise<void>;
   renderTable: (
@@ -39,6 +41,8 @@ interface GenericIndexProps<T, F> {
     setFiltros: React.Dispatch<React.SetStateAction<F>>,
     onEdit: (item: T) => void,
     onDelete: (id: string) => void,
+    onAsiggment: (id: string) => void,
+    onAsiggmentSuc: (id: string) => void,
     onUpdateStatus: (id: string, newStatus: string) => void
   ) => React.ReactNode;
   renderFilterForm: (
@@ -64,6 +68,8 @@ const GenericIndex = <T, F>({
   updateStatus,
   renderTable,
   renderFilterForm,
+  onAsiggment,
+  onAsiggmentSuc,
   renderForm,
 }: GenericIndexProps<T, F>) => {
   const [filtros, setFiltros] = useState<F>(filtrosIniciales);
@@ -108,14 +114,14 @@ const GenericIndex = <T, F>({
     setIsModalOpen(true);
   };
   const handleOpenNewModal = () => {
-    const item : UserCreatePayload = {
-        Nombres: "",
-        Apellidos: "",
-        Correo:  "",
-        Contra: "",
-        Telefono: "",
-        IdPerfil: "",
-        Activo: true,
+    const item: UserCreatePayload = {
+      Nombres: "",
+      Apellidos: "",
+      Correo: "",
+      Contra: "",
+      Telefono: "",
+      IdPerfil: "",
+      Activo: true,
     }
     setUser(item);
     setIsModalOpen(true);
@@ -159,7 +165,7 @@ const GenericIndex = <T, F>({
   };
 
   return (
-    <Box sx={{ backgroundColor: "#f2f2f2", minHeight: "90vh",  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", }}>
+    <Box sx={{ backgroundColor: "#f2f2f2", minHeight: "90vh", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", }}>
       <AppBar
         position="static"
         sx={{ backgroundColor: configuracion?.ColorSecundario ?? "#f2f2f2" }}
@@ -172,11 +178,11 @@ const GenericIndex = <T, F>({
             {title}
           </Typography>
           <Box sx={{ display: "flex", gap: 1 }}>
-          <CustomIconButton
-            onClick={() => handleOpenNewModal()}
-            title="Agregar nuevo"
+            <CustomIconButton
+              onClick={() => handleOpenNewModal()}
+              title="Agregar nuevo"
             >
-            <AddIcon />
+              <AddIcon />
             </CustomIconButton>
 
             <CustomIconButton
@@ -219,13 +225,15 @@ const GenericIndex = <T, F>({
           setFiltros,
           handleOpenModal,
           handleDelete,
+          onAsiggment,
+          onAsiggmentSuc,
           handleUpdateStatus
         )
       )}
       <GenericFormModal
         isLoading={isLoading}
         open={isModalOpen}
-        title={ (selectedItem ? "Editar " : "Crear ") + titleModal}
+        title={(selectedItem ? "Editar " : "Crear ") + titleModal}
         onClose={handleCloseModal}
         onSubmit={handleSaveModal}
       >

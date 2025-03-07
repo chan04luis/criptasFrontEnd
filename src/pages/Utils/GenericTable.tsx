@@ -20,6 +20,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import ToggleOffIcon from "@mui/icons-material/ToggleOff";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import BusinessIcon from "@mui/icons-material/Business";
 
 export interface Column<T> {
   field: keyof T;
@@ -44,6 +46,8 @@ interface GenericTableProps<T> {
   sortOrder?: "asc" | "desc";
   onEdit?: (item: T) => void;
   onDelete?: (id: string) => void;
+  onAsiggment?: (id: string) => void;
+  onAsiggmentSuc?: (id: string) => void;
   onUpdateStatus?: (id: string, currentStatus: string) => void;
   statusField?: keyof T;
   keyField: keyof T; // Propiedad dinámica para clave única
@@ -64,6 +68,8 @@ const GenericTable = <T extends Record<string, any>>({
   sortOrder,
   onEdit,
   onDelete,
+  onAsiggment,
+  onAsiggmentSuc,
   onUpdateStatus,
   statusField,
   keyField,
@@ -81,7 +87,7 @@ const GenericTable = <T extends Record<string, any>>({
   };
 
   return (
-    <Box sx={{ marginTop: 4, marginX:2, backgroundColor: "#fff" }}>
+    <Box sx={{ marginTop: 4, marginX: 2, backgroundColor: "#fff" }}>
       <Box sx={{ width: "100%", overflowX: "auto" }}>
         <Table>
           <TableHead>
@@ -89,7 +95,7 @@ const GenericTable = <T extends Record<string, any>>({
               {columns.map((col) => (
                 <TableCell key={String(col.field)} align="center">
                   <Box display="flex" flexDirection="column">
-                    {col.sortable && (
+                    {col.sortable ? (
                       <Box
                         display="flex"
                         alignItems="center"
@@ -100,7 +106,7 @@ const GenericTable = <T extends Record<string, any>>({
                         <span>{col.headerName}</span>
                         {renderSortIcon(col.field)}
                       </Box>
-                    )}
+                    ) : <span>{col.headerName}</span>}
                     {col.filterable && (
                       <TextField
                         size="small"
@@ -152,6 +158,20 @@ const GenericTable = <T extends Record<string, any>>({
                           </IconButton>
                         </Tooltip>
                       )}
+                      {onAsiggment && (
+                        <Tooltip title="Asignar Servicios">
+                          <IconButton onClick={() => onAsiggment(String(row[keyField]))}>
+                            <PlaylistAddIcon color="error" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                      {onAsiggmentSuc && (
+                        <Tooltip title="Asignar Sucursales">
+                          <IconButton onClick={() => onAsiggmentSuc(String(row[keyField]))}>
+                            <BusinessIcon color="error" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                       {onUpdateStatus && statusField && row[statusField] !== undefined && (
                         <Tooltip
                           title={
@@ -186,9 +206,9 @@ const GenericTable = <T extends Record<string, any>>({
           </TableBody>
           <TableFooter>
             <TableRow>
-                <TableCell colSpan={columns.length + (onEdit || onDelete || onUpdateStatus ? 1 : 0)}>
+              <TableCell colSpan={columns.length + (onEdit || onDelete || onUpdateStatus ? 1 : 0)}>
                 <Box display="flex" justifyContent="center">
-                    <TablePagination
+                  <TablePagination
                     component="div"
                     count={totalRecords}
                     page={currentPage - 1}
@@ -198,13 +218,13 @@ const GenericTable = <T extends Record<string, any>>({
                     rowsPerPageOptions={[10, 20, 50, 100]}
                     labelRowsPerPage="Registros por página:"
                     labelDisplayedRows={({ from, to, count }) =>
-                        `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`
+                      `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`
                     }
-                    />
+                  />
                 </Box>
-                </TableCell>
+              </TableCell>
             </TableRow>
-           </TableFooter>
+          </TableFooter>
         </Table>
       </Box>
     </Box>

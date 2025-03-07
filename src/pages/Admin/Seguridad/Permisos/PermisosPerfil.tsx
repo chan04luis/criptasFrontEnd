@@ -24,14 +24,15 @@ import { PermisoPagina } from "../../../../entities/Seguridad/Permisos/PermisoPa
 import { PermisoBoton } from "../../../../entities/Seguridad/Permisos/PermisoBoton";
 import MasterLayout from "../../Seguridad/Modulos/MasterLayout";
 import CustomIconButton from "../../../Utils/CustomIconButton";
-import { Configuracion } from "../../../../entities/Seguridad/Configuracion";
+import { RootObject } from "../../../../entities/Seguridad/RootObject";
 
 interface PermisosPerfilProps {
-  config: Configuracion | undefined;
+  result: RootObject | null;
 }
 
 
-const PermisosPerfil: React.FC<PermisosPerfilProps> = ({config}) => {
+const PermisosPerfil: React.FC<PermisosPerfilProps> = ({ result }) => {
+  var config = result?.Configuracion;
   const { idPerfil } = useParams<{ idPerfil: string }>();
   const navigate = useNavigate();
 
@@ -67,8 +68,8 @@ const PermisosPerfil: React.FC<PermisosPerfilProps> = ({config}) => {
     }
   };
   useEffect(() => {
-    if(!loading)
-    fetchPermisos();
+    if (!loading)
+      fetchPermisos();
   }, []);
 
   const handleSave = async () => {
@@ -120,14 +121,14 @@ const PermisosPerfil: React.FC<PermisosPerfilProps> = ({config}) => {
     pagina.PermisosBoton.forEach((boton) => {
       boton.TienePermiso = pagina.TienePermiso;
     });
-    modulo.TienePermiso = modulo.PermisosPagina.filter(x=>x.TienePermiso).length > 0;
+    modulo.TienePermiso = modulo.PermisosPagina.filter(x => x.TienePermiso).length > 0;
     setData({ ...data! });
   };
 
   const handleToggleBoton = (modulo: PermisoModulo, pagina: PermisoPagina, boton: PermisoBoton) => {
     boton.TienePermiso = !boton.TienePermiso;
-    pagina.TienePermiso = pagina.PermisosBoton.filter(x=>x.TienePermiso).length > 0;
-    modulo.TienePermiso = modulo.PermisosPagina.filter(p=>p.PermisosBoton.filter(x=>x.TienePermiso).length>0).length > 0;
+    pagina.TienePermiso = pagina.PermisosBoton.filter(x => x.TienePermiso).length > 0;
+    modulo.TienePermiso = modulo.PermisosPagina.filter(p => p.PermisosBoton.filter(x => x.TienePermiso).length > 0).length > 0;
     setData({ ...data! });
   };
 
@@ -179,7 +180,7 @@ const PermisosPerfil: React.FC<PermisosPerfilProps> = ({config}) => {
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <Checkbox
                         checked={boton.TienePermiso}
-                        onChange={() => handleToggleBoton(modulo,pagina, boton)}
+                        onChange={() => handleToggleBoton(modulo, pagina, boton)}
                       />
                       <CircleIcon sx={{ color: "#f44336" }} />
                       <Typography>
@@ -198,9 +199,9 @@ const PermisosPerfil: React.FC<PermisosPerfilProps> = ({config}) => {
       <CustomIconButton onClick={fetchPermisos} title="Refrescar datos">
         <RefreshIcon />
       </CustomIconButton>
-      <CustomIconButton onClick={handleSave} title="Guardar cambios">
+      {result?.PermisosBotones.find(x => x.ClaveBoton == 'edit_perfil')?.TienePermiso && <CustomIconButton onClick={handleSave} title="Guardar cambios">
         <SaveIcon />
-      </CustomIconButton>
+      </CustomIconButton>}
       <CustomIconButton onClick={() => navigate(-1)} title="Volver">
         <ArrowBackIcon />
       </CustomIconButton>

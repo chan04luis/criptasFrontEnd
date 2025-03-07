@@ -31,6 +31,13 @@ import PermisosPerfil from "./Admin/Seguridad/Permisos/PermisosPerfil";
 import ChangePass from "./Admin/Seguridad/Configuraciones/changePass";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import IndexSucursales from "./Admin/Catalogos/Iglesias/IndexSucursal";
+import IndexClientes from "./Admin/Catalogos/Clientes/IndexClientes";
+import IndexServicios from "./Admin/Catalogos/Servicios/IndexServicios";
+import CitasComponent from "./Admin/AtencionMedica/CitasComponent";
+import IndexCitas from "./Admin/AtencionMedica/Citas/IndexCitas";
+import SalaDoctor from "./Admin/AtencionMedica/SalaDoc/SalaDoctor";
+import SalaEspera from "./Admin/AtencionMedica/SalaDoc/SalaEspera";
 
 const AdminDrawer = ({
   result,
@@ -205,24 +212,29 @@ const Admin = () => {
         }}
       >
         <Routes>
-          <Route path="seguridad/usuarios" element={<ViewUsers parentConfig={result?.Configuracion} />} />
-          <Route
-            path="clientes"
-            element={
-              <div>
-                <Typography variant="h5">Catálogo de Clientes</Typography>
-              </div>
-            }
-          />
+          <Route path="seguridad/usuarios" element={<ViewUsers result={result} />} />
+
           <Route path="seguridad/config-general" element={<ViewConfigs parentConfig={result?.Configuracion} />} />
 
           <Route path="seguridad/elementos-sistema" element={<ElementosSistema parentConfig={result?.Configuracion} />} />
 
           <Route path="seguridad/cambio_contra" element={<ChangePass parentConfig={result?.Configuracion} user={result?.Usuario} />} />
 
-          <Route path="seguridad/perfiles" element={<IndexPerfil parentConfig={result?.Configuracion} />} />
+          <Route path="seguridad/perfiles" element={<IndexPerfil result={result} />} />
 
-          <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil config={result?.Configuracion} />} />
+          <Route path="perfiles/permisos/:idPerfil" element={<PermisosPerfil result={result} />} />
+
+          <Route path="catalogos/clientes" element={<IndexClientes result={result} />} />
+
+          <Route path="catalogos/sucursales" element={<IndexSucursales result={result} />} />
+
+          <Route path="catalogos/servicios" element={<IndexServicios result={result} />} />
+
+          <Route path="atencion/citas" element={<IndexCitas result={result} />} />
+
+          <Route path="atencion/sala_atencion" element={<SalaDoctor result={result} />} />
+
+          <Route path="atencion/sala" element={<SalaEspera result={result} />} />
         </Routes>
         <Outlet />
         <ToastContainer position="top-right" autoClose={2000} />

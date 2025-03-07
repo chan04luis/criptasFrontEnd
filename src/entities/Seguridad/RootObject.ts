@@ -4,6 +4,7 @@ import { Menu } from "./Menu";
 import { PermisoPagina } from "./Permisos/PermisoPagina";
 import { PermisosModulo } from "./PermisosModulo";
 import { PermisoBoton } from "./Permisos/PermisoBoton";
+import { Sucursal } from "../Catalogos/sucursales/Sucursal";
 
 export interface RootObject {
     Usuario: Usuario;
@@ -12,5 +13,6 @@ export interface RootObject {
     PermisosModulos: PermisosModulo[];
     PermisosPaginas: PermisoPagina[];
     PermisosBotones: PermisoBoton[];
+    Sucursales: Sucursal[];
     Menu: Menu;
 }

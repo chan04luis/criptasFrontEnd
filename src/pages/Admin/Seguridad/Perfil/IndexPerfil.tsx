@@ -4,7 +4,6 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import { Configuracion } from "../../../../entities/Seguridad/Configuracion";
 import MasterLayout from "../Modulos/MasterLayout";
 import CustomIconButton from "../../../Utils/CustomIconButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -19,12 +18,14 @@ import GenericFormModal from "../../../Utils/GenericFormModal";
 import PerfilForm from "./PerfilForm";
 import ConfirmModal from "../../../Utils/ConfirmModal";
 import { useNavigate } from "react-router-dom";
+import { RootObject } from "../../../../entities/Seguridad/RootObject";
 
 interface IndexPerfilProps {
-  parentConfig: Configuracion | undefined;
+  result: RootObject | null;
 }
 
-const IndexPerfil: React.FC<IndexPerfilProps> = ({ parentConfig }) => {
+const IndexPerfil: React.FC<IndexPerfilProps> = ({ result }) => {
+  var parentConfig = result?.Configuracion;
   const [loading, setLoading] = useState<boolean>(false);
   const [datos, setDatos] = useState<Perfil[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -42,22 +43,22 @@ const IndexPerfil: React.FC<IndexPerfilProps> = ({ parentConfig }) => {
   });
 
   const handleRefresh = async () => {
-    if(!loading){
-        setLoading(true);
-        setDatos([]);
-        try {
+    if (!loading) {
+      setLoading(true);
+      setDatos([]);
+      try {
         const result = await PerfilService.get();
         if (result.HasError) {
-            toast.warn(result.Message);
+          toast.warn(result.Message);
         } else {
-            setDatos(result.Result || []);
+          setDatos(result.Result || []);
         }
-        } catch (error) {
+      } catch (error) {
         toast.error("Error al cargar los perfiles.");
         console.error(error);
-        } finally {
+      } finally {
         setLoading(false);
-        }
+      }
     }
   };
 
@@ -118,9 +119,9 @@ const IndexPerfil: React.FC<IndexPerfilProps> = ({ parentConfig }) => {
 
   const renderActions = (
     <>
-      <CustomIconButton onClick={() => handleOpenModal()} title="Agregar nuevo">
+      {result?.PermisosBotones.find(x => x.ClaveBoton == 'add_perfil')?.TienePermiso && <CustomIconButton onClick={() => handleOpenModal()} title="Agregar nuevo">
         <AddIcon />
-      </CustomIconButton>
+      </CustomIconButton>}
       <CustomIconButton onClick={handleRefresh} disabled={loading} title="Refrescar datos">
         <RefreshIcon />
       </CustomIconButton>
@@ -160,13 +161,13 @@ const IndexPerfil: React.FC<IndexPerfilProps> = ({ parentConfig }) => {
                     Eliminable: {perfil.Eliminable ? "Sí" : "No"}
                   </Typography>
                   <Box sx={{ display: "flex", gap: 1 }}>
-                    <CustomIconButton
+                    {result?.PermisosBotones.find(x => x.ClaveBoton == 'edit_perfil')?.TienePermiso && <CustomIconButton
                       onClick={() => handleOpenModal(perfil)}
                       title="Editar perfil"
                     >
                       <EditIcon />
-                    </CustomIconButton>
-                    <CustomIconButton
+                    </CustomIconButton>}
+                    {result?.PermisosBotones.find(x => x.ClaveBoton == 'delete_perfil')?.TienePermiso && <CustomIconButton
                       disabled={!perfil.Eliminable}
                       onClick={() => {
                         setSelectedPerfil(perfil);
@@ -175,7 +176,7 @@ const IndexPerfil: React.FC<IndexPerfilProps> = ({ parentConfig }) => {
                       title="Eliminar perfil"
                     >
                       <DeleteForeverIcon />
-                    </CustomIconButton>
+                    </CustomIconButton>}
                     <CustomIconButton
                       onClick={() => navigate(`/admin/perfiles/permisos/${perfil.IdPerfil}`)}
                       title="Permisos de perfil"

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Box, Typography, useMediaQuery, TextField, Button, Link } from "@mui/material";
+import { Container, Box, Typography, useMediaQuery, TextField, Button, Link, CircularProgress } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { apiUrl, errorServer } from "../config/globals";
 const Login = () => {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [password, setPassword] = useState("");
   const { updateToken } = useAuth();
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -22,6 +23,7 @@ const Login = () => {
     const userCredentials = { Correo: email, Password: password };
 
     try {
+      setLoading(true);
       const response = await axios.post(`${apiUrl}/autenticacion/login`, userCredentials, {
         headers: {
           'accept': 'text/plain',
@@ -50,6 +52,7 @@ const Login = () => {
         toast.error(errorServer);
       }
     }
+    setLoading(false);
   };
 
   const handleForgotPassword = () => {
@@ -118,15 +121,20 @@ const Login = () => {
                 inputLabel: { shrink: true },
               }}
             />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              sx={{ marginTop: 2 }}
-            >
-              Iniciar sesión
-            </Button>
+            {loading ? (
+              <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ marginTop: 2 }}
+              >
+                Iniciar sesión
+              </Button>)}
           </form>
           <Link
             href="#"

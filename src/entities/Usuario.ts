@@ -1,3 +1,5 @@
+
+
 export interface Usuario {
     IdUsuario: string | null;
     IdPerfil: string;

@@ -31,16 +31,22 @@ const GenericFormModal: React.FC<GenericFormModalProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: "100vh",
+          maxWidth: "90%",
+          maxHeight: "90vh",
+          overflowY: "auto",
           bgcolor: "background.paper",
           boxShadow: 24,
           p: 4,
+          borderRadius: 2,
         }}
       >
         <Typography variant="h6" sx={{ marginBottom: 2, textAlign: "center" }}>
           {title}
         </Typography>
-        {children}
+        <Box sx={{ maxHeight: "70vh", overflowY: "auto", paddingRight: 1 }}>
+          {children}
+        </Box>
         <Box
           sx={{
             display: "flex",
@@ -52,7 +58,7 @@ const GenericFormModal: React.FC<GenericFormModalProps> = ({
             Cancelar
           </Button>
           <Button onClick={onSubmit} disabled={isLoading} variant="contained" color="primary">
-            { isLoading ? 'Guardando..' : 'Guardar'}
+            {isLoading ? 'Guardando..' : 'Guardar'}
           </Button>
         </Box>
       </Box>
