@@ -27,7 +27,6 @@ import UpdateSucursal from "./UpdateSucursal";
 import UpdateSucursalMaps from "./UpdateSucursalMaps";
 import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
-import { useNavigate } from "react-router-dom";
 import CustomIconButton from "../../../Utils/CustomIconButton";
 import { RootObject } from "../../../../entities/Seguridad/RootObject";
 import { Sucursal } from "../../../../entities/Catalogos/sucursales/Sucursal";
@@ -100,7 +99,6 @@ const IndexSucursales: React.FC<IndexSucursalesProps> = ({ result }) => {
     return "Id" in sucursal;
   };
 
-  const navigate = useNavigate();
 
   const handleOpenLocationModal = (sucursal: Sucursal) => {
     setSelectedLocation({

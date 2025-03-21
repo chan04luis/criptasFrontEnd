@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, TextField } from "@mui/material";
-import UploadImage from "../../../Utils/UploadImage";
 import "react-quill/dist/quill.snow.css";
-import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { EntServicios } from "../../../../entities/Catalogos/servicios/EntServicios";
-import { Height } from "@mui/icons-material";
 import UploadTwoImages from "../../../Utils/UploadTwoImages";
 
 let ReactQuill: any = null; // Se inicializa null para evitar SSR issues en Vite

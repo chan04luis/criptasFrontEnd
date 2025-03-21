@@ -34,7 +34,7 @@ export class CitasService {
         return response.data;
     }
 
-    static async atenderTurno(idCita: string, idSucursal: String): Promise<ApiResponse<boolean>> {
+    static async atenderTurno(idCita: String, idSucursal: String): Promise<ApiResponse<boolean>> {
         const response = await axios.put(`${apiUrl}/AtencionMedica/Citas/Atender`, { idCita, idSucursal }, { headers });
         return response.data;
     }

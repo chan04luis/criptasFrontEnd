@@ -72,7 +72,7 @@ const SalaEspera: React.FC<SalaEsperaProps> = ({ result }) => {
         } else {
             toast.success("Paciente ha llegado.");
             fetchCitas();
-            connection?.invoke("ActualizarSalaEspera"); // Notifica a otros usuarios
+            connection?.invoke("ActualizarSalaEspera"); // 📢 Notificar a otros usuarios
         }
         setLoading(false);
     };
@@ -102,7 +102,7 @@ const SalaEspera: React.FC<SalaEsperaProps> = ({ result }) => {
 
             try {
                 await newConnection.start();
-                console.log("Conectado a SignalR - Sala de Espera");
+                console.log("✅ Conectado a SignalR - Sala de Espera");
 
                 // 📌 Evento para actualizar la lista en tiempo real
                 newConnection.on("ActualizarSalaEspera", () => {
@@ -112,7 +112,7 @@ const SalaEspera: React.FC<SalaEsperaProps> = ({ result }) => {
 
                 setConnection(newConnection);
             } catch (error) {
-                console.error("Error al conectar con SignalR:", error);
+                console.error("❌ Error al conectar con SignalR:", error);
             }
         };
 
@@ -173,9 +173,11 @@ const SalaEspera: React.FC<SalaEsperaProps> = ({ result }) => {
                                             <TableCell>{cita.Cliente}</TableCell>
                                             <TableCell>{cita.Servicio}</TableCell>
                                             <TableCell>
-                                                {!cita.RegistradoEnPiso && <IconButton onClick={() => handleRegistrarLlegada(cita.Id)} title="Marcar Llegada">
-                                                    ✅
-                                                </IconButton>}
+                                                {!cita.RegistradoEnPiso && (
+                                                    <IconButton onClick={() => handleRegistrarLlegada(cita.Id)} title="Marcar Llegada">
+                                                        ✅
+                                                    </IconButton>
+                                                )}
                                             </TableCell>
                                         </TableRow>
                                     ))}

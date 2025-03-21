@@ -28,7 +28,6 @@ interface SalaDoctorProps {
 
 const SalaDoctor: React.FC<SalaDoctorProps> = ({ result }) => {
     const parentConfig = result?.Configuracion;
-    const user = result?.Usuario;
     const [loading, setLoading] = useState<boolean>(false);
     const [citas, setCitas] = useState<EntCitaEditable[]>([]);
     const [salaDisponible, setSalaDisponible] = useState<boolean>(false);

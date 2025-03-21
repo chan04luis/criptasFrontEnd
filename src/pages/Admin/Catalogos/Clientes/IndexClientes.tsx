@@ -31,7 +31,6 @@ import { Cliente, ClienteUpdatePayload, ClienteCreatePayload, ClienteFilters } f
 import GenericFilterForm, { FilterField } from "../../../Utils/GenericFilterForm";
 import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
-import { useNavigate } from "react-router-dom";
 import { IdCliente } from "../../../../config/globals";
 import { RootObject } from "../../../../entities/Seguridad/RootObject";
 import ClienteService from "../../../../services/Catalogo/ClienteService";
@@ -84,7 +83,6 @@ const IndexClientes: React.FC<IndexClientesProps> = ({ result }) => {
     { type: "autocomplete", name: "Estatus", label: "Estatus", value: filters.Estatus, options: [{ id: true, label: "Activo" }, { id: false, label: "Inactivo" }] },
   ];
 
-  const navigate = useNavigate();
 
   const fetchClientes = async () => {
     setLoading(true);

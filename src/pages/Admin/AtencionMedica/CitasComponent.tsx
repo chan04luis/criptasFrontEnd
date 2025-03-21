@@ -18,7 +18,7 @@ const CitasComponent: React.FC = () => {
         setLoading(true);
         setError(null);
         try {
-            const filtro: CitasFiltroRequest = { estado: "pendiente" };
+            const filtro: CitasFiltroRequest = { Estado: "pendiente" };
             const response = await CitasService.obtenerCitas(filtro);
             if (!response.HasError && response.Result) {
                 setCitas(response.Result);
@@ -32,10 +32,10 @@ const CitasComponent: React.FC = () => {
         }
     };
 
-    const atenderCita = async (idSucursal: string) => {
+    const atenderCita = async (id: String, idSucursal: string) => {
         setLoading(true);
         try {
-            const response = await CitasService.atenderTurno(idSucursal);
+            const response = await CitasService.atenderTurno(id, idSucursal);
             if (!response.HasError) {
                 cargarCitas(); // Recargar citas después de atender una
             } else {
@@ -75,15 +75,15 @@ const CitasComponent: React.FC = () => {
                     <TableBody>
                         {citas.length > 0 ? (
                             citas.map((cita) => (
-                                <TableRow key={cita.id}>
-                                    <TableCell>{cita.cliente}</TableCell>
-                                    <TableCell>{cita.sucursal}</TableCell>
-                                    <TableCell>{cita.servicio}</TableCell>
-                                    <TableCell>{cita.doctor || "Sin asignar"}</TableCell>
-                                    <TableCell>{new Date(cita.fechaCita).toLocaleString()}</TableCell>
-                                    <TableCell>{cita.estado}</TableCell>
+                                <TableRow key={cita.Id}>
+                                    <TableCell>{cita.Cliente}</TableCell>
+                                    <TableCell>{cita.Sucursal}</TableCell>
+                                    <TableCell>{cita.Servicio}</TableCell>
+                                    <TableCell>{cita.Doctor || "Sin asignar"}</TableCell>
+                                    <TableCell>{new Date(cita.FechaCita).toLocaleString()}</TableCell>
+                                    <TableCell>{cita.Estado}</TableCell>
                                     <TableCell>
-                                        <Button variant="outlined" color="success" onClick={() => atenderCita(cita.idSucursal)}>
+                                        <Button variant="outlined" color="success" onClick={() => atenderCita(cita.Id, cita.IdSucursal)}>
                                             Atender
                                         </Button>
                                     </TableCell>

@@ -5,7 +5,6 @@ import {
     DialogContent,
     DialogTitle,
     Button,
-    FormControlLabel,
     Checkbox,
     CircularProgress,
     Box,

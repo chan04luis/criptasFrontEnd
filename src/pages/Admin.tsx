@@ -34,7 +34,6 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import IndexSucursales from "./Admin/Catalogos/Iglesias/IndexSucursal";
 import IndexClientes from "./Admin/Catalogos/Clientes/IndexClientes";
 import IndexServicios from "./Admin/Catalogos/Servicios/IndexServicios";
-import CitasComponent from "./Admin/AtencionMedica/CitasComponent";
 import IndexCitas from "./Admin/AtencionMedica/Citas/IndexCitas";
 import SalaDoctor from "./Admin/AtencionMedica/SalaDoc/SalaDoctor";
 import SalaEspera from "./Admin/AtencionMedica/SalaDoc/SalaEspera";
